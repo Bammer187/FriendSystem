@@ -7,3 +7,4 @@
 5. () ISSUE-005: respond command
 6. () ISSUE-006: list command to get all friends
 7. () ISSUE-007: Create a UI for list command
+8. () ISSUE-008: FriendCommandExecutor Class to handle subcommands
