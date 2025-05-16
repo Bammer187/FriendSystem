@@ -5,3 +5,5 @@
 3. () ISSUE-003: friend remove command
 4. () ISSUE-004: message command
 5. () ISSUE-005: respond command
+6. () ISSUE-006: list command to get all friends
+7. () ISSUE-007: Create a UI for list command

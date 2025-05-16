@@ -17,15 +17,21 @@ public class FriendAddCommandExecutor implements CommandExecutor {
             return false;
         }
 
-        if (strings.length == 1) {
-            UUID playerUUID = player.getUniqueId();
-            Player friend = Bukkit.getPlayerExact(strings[0]);
-            if (friend== null) {
-                player.sendMessage("§cCouldn't find a player with the given name.");
-                return true;
-            }
-            UUID friendUUID = friend.getUniqueId();
+        if (strings.length != 1) {
+            player.sendMessage("§cUsage: /friend add <Player>");
+            return false;
         }
+
+        UUID playerUUID = player.getUniqueId();
+        Player friend = Bukkit.getPlayerExact(strings[0]);
+        if (friend== null) {
+            player.sendMessage("§cCouldn't find a player with the given name.");
+            return false;
+        }
+        UUID friendUUID = friend.getUniqueId();
+
+        player.sendMessage("§aSend friend request to " + friend.getName());
+
         return false;
     }
 }
