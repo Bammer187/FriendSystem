@@ -7,6 +7,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
+import static net.kyori.adventure.text.Component.text;
+
 public class FriendAddCommandExecutor implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String @NotNull [] strings) {
@@ -30,7 +35,15 @@ public class FriendAddCommandExecutor implements CommandExecutor {
         }
 
         player.sendMessage("§aSend friend request to " + friend.getName());
-        friend.sendMessage("§aYou've gotten a friend request from " + player.getName());
+
+        Component message = text("§aYou've gotten a friend request from " + player.getName() + " ")
+                .append(
+                        text("§e[Click here to accept]")
+                                .clickEvent(ClickEvent.runCommand("/friend accept " + player.getName()))
+                                .hoverEvent(HoverEvent.showText(text("Click to accept the friend request")))
+                );
+
+        friend.sendMessage(message);
 
         return false;
     }
