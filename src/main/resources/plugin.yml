@@ -2,3 +2,5 @@ name: FriendSystem
 version: '1.0-SNAPSHOT'
 main: me.yinzuro.friendSystem.FriendSystem
 api-version: '1.21'
+commands:
+  friend:
