@@ -21,12 +21,16 @@ public class FriendAddCommandExecutor implements CommandExecutor {
         }
 
         Player friend = Bukkit.getPlayerExact(strings[0]);
-        if (friend== null) {
+        if (friend == null) {
             player.sendMessage("§cCouldn't find a player with the given name.");
+            return true;
+        } else if (friend == player) {
+            player.sendMessage("§cYou can't add yourself.");
             return true;
         }
 
         player.sendMessage("§aSend friend request to " + friend.getName());
+        friend.sendMessage("§aYou've gotten a friend request from " + player.getName());
 
         return false;
     }
