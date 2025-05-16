@@ -1,5 +1,6 @@
 package me.yinzuro.friendSystem.commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -11,14 +12,19 @@ import java.util.UUID;
 public class FriendAddCommandExecutor implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String @NotNull [] strings) {
-        if (!(commandSender instanceof Player)) {
-            commandSender.sendMessage("You aren't a player");
+        if (!(commandSender instanceof Player player)) {
+            commandSender.sendMessage("§cYou aren't a player");
             return false;
         }
 
-        Player player = (Player) commandSender;
-
         if (strings.length == 1) {
+            UUID playerUUID = player.getUniqueId();
+            Player friend = Bukkit.getPlayerExact(strings[0]);
+            if (friend== null) {
+                player.sendMessage("§cCouldn't find a player with the given name.");
+                return true;
+            }
+            UUID friendUUID = friend.getUniqueId();
         }
         return false;
     }
