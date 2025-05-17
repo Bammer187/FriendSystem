@@ -74,6 +74,8 @@ public class FriendAddCommandExecutor implements CommandExecutor {
             statement.setString(1, friendUUID.toString());
             statement.setString(2, playerUUID.toString());
             statement.executeUpdate();
+
+            FriendSystem.getDatabase().disconnect();
         } catch (SQLException e) {
             fromPlayer.sendMessage("§cThere was an error while saving to database");
             plugin.getLogger().severe("MySQL-ERROR while inserting into open_friend_requests" + e.getMessage());

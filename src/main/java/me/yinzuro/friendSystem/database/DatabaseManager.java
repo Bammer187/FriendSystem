@@ -1,5 +1,6 @@
 package me.yinzuro.friendSystem.database;
 
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.Connection;
@@ -8,23 +9,29 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class DatabaseManager {
+
     private final JavaPlugin plugin;
     private Connection connection;
 
+    private final String host, database, username, password;
+    private final int port;
+
     public DatabaseManager(JavaPlugin plugin) {
         this.plugin = plugin;
+
+        FileConfiguration config = plugin.getConfig();
+        host = config.getString("mysql.host");
+        database = config.getString("mysql.database");
+        username = config.getString("mysql.username");
+        password = config.getString("mysql.password");
+        port = config.getInt("mysql.port");
     }
 
     public void connect() throws SQLException {
-        String host = plugin.getConfig().getString("mysql.host");
-        int port = plugin.getConfig().getInt("mysql.port");
-        String database = plugin.getConfig().getString("mysql.database");
-        String username = plugin.getConfig().getString("mysql.username");
-        String password = plugin.getConfig().getString("mysql.password");
 
-        String url = "jdbc:mysql://" + host + ":" + port + "/" + database + "?useSSL=false&autoReconnect=true";
-        this.connection = DriverManager.getConnection(url, username, password);
+        connection = getConnection();
         createTables();
+        disconnect();
     }
 
     public void disconnect() {
@@ -35,8 +42,9 @@ public class DatabaseManager {
         }
     }
 
-    public Connection getConnection() {
-        return connection;
+    public Connection getConnection() throws SQLException {
+        String url = "jdbc:mysql://" + host + ":" + port + "/" + database + "?useSSL=false&autoReconnect=true";
+        return DriverManager.getConnection(url, username, password);
     }
 
     public boolean isConnected() {
