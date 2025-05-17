@@ -32,4 +32,8 @@ public class DatabaseManager {
             } catch (SQLException ignored) {}
         }
     }
+
+    public Connection getConnection() {
+        return connection;
+    }
 }
