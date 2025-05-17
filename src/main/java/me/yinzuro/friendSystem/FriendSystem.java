@@ -6,12 +6,14 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class FriendSystem extends JavaPlugin {
 
+    private static FriendSystem instance;
     private static DatabaseManager database;
 
     @Override
     public void onEnable() {
         // Plugin startup logic
         saveDefaultConfig();
+        instance = this;
         database = new DatabaseManager(this);
 
         try {
@@ -33,7 +35,11 @@ public final class FriendSystem extends JavaPlugin {
         }
     }
 
-    public DatabaseManager getDatabase() {
+    public static DatabaseManager getDatabase() {
         return database;
+    }
+
+    public static FriendSystem getInstance() {
+        return instance;
     }
 }
