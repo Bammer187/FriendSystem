@@ -9,7 +9,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
 
@@ -62,6 +64,25 @@ public class FriendDenyCommandExecutor implements CommandExecutor {
             statement.executeUpdate();
 
             FriendSystem.getDatabase().disconnect();
+        }
+    }
+
+    private boolean checkIfThereIsRequest(Player fromPlayer, Player toPlayer) throws SQLException {
+        String query = """
+        SELECT 1 FROM open_friend_requests
+        WHERE player_uuid = ? AND from_player_uuid = ?
+        LIMIT 1;
+        """;
+
+        try (Connection conn = FriendSystem.getDatabase().getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+
+            ps.setString(1, toPlayer.getUniqueId().toString());
+            ps.setString(2, fromPlayer.getUniqueId().toString());
+
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
         }
     }
 }
