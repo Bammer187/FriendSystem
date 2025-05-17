@@ -24,4 +24,12 @@ public class DatabaseManager {
         String url = "jdbc:mysql://" + host + ":" + port + "/" + database + "?useSSL=false&autoReconnect=true";
         this.connection = DriverManager.getConnection(url, username, password);
     }
+
+    public void disconnect() {
+        if(connection != null) {
+            try {
+                connection.close();
+            } catch (SQLException ignored) {}
+        }
+    }
 }
