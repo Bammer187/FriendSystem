@@ -36,7 +36,7 @@ public class FriendAcceptCommandExecutor implements CommandExecutor {
         }
 
         try {
-           if (checkIfThereIsRequest(player, friend)) {
+           if (checkIfThereIsRequest(friend, player)) {
                 try {
                     addFriend(friend, player);
                     player.sendMessage("§aYou are now friends with " + friend.getName() + ".");
@@ -70,7 +70,7 @@ public class FriendAcceptCommandExecutor implements CommandExecutor {
             ps.setString(2, fromPlayer.getUniqueId().toString());
 
             try (ResultSet rs = ps.executeQuery()) {
-                return !rs.next();
+                return rs.next();
             }
         }
     }
