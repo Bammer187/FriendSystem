@@ -30,10 +30,13 @@ public class FriendAcceptCommandExecutor implements CommandExecutor {
         if (friend == null) {
             player.sendMessage("§cCouldn't find a player with the given name.");
             return true;
+        } else if (friend == player) {
+            player.sendMessage("§cYou can't accept a request form yourself.");
+            return true;
         }
 
         try {
-           if (checkIfThereIsRequest(friend, player)) {
+           if (checkIfThereIsRequest(player, friend)) {
                 try {
                     addFriend(friend, player);
                 } catch (SQLException e) {
