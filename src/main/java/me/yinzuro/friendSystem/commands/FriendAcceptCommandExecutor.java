@@ -38,14 +38,14 @@ public class FriendAcceptCommandExecutor implements CommandExecutor {
                     addFriend(friend, player);
                 } catch (SQLException e) {
                     player.sendMessage("§c There was an error while trying to accept the request.");
-                    plugin.getLogger().severe("§cMySQL-ERROR while accepting a friend request.");
+                    plugin.getLogger().severe("§cMySQL-ERROR while accepting a friend request: " + e.getMessage());
                 }
            } else {
                player.sendMessage("§cYou don't have an open request from this player.");
            }
         } catch (SQLException e) {
             player.sendMessage("§cThere was an error while accepting the request.");
-            plugin.getLogger().severe("§cMySQL-ERROR while getting friend request.");
+            plugin.getLogger().severe("§cMySQL-ERROR while getting friend request: " + e.getMessage());
         }
 
         return false;
@@ -85,7 +85,27 @@ public class FriendAcceptCommandExecutor implements CommandExecutor {
             FriendSystem.getDatabase().disconnect();
         } catch (SQLException e) {
             fromPlayer.sendMessage("§cThere was an error while deleting from database");
-            plugin.getLogger().severe("MySQL-ERROR while deleting from open_friend_requests" + e.getMessage());
+            plugin.getLogger().severe("MySQL-ERROR while deleting from open_friend_requests: " + e.getMessage());
+        }
+
+        try (PreparedStatement statement = FriendSystem.getDatabase().getConnection().prepareStatement("""
+                INSERT INTO friends (player_uuid, friend_uuid) VALUES (?, ?);""")) {
+
+            UUID playerUUID = fromPlayer.getUniqueId();
+            UUID friendUUID = toPlayer.getUniqueId();
+
+            statement.setString(1, friendUUID.toString());
+            statement.setString(2, playerUUID.toString());
+            statement.executeUpdate();
+
+            statement.setString(1, playerUUID.toString());
+            statement.setString(2, friendUUID.toString());
+            statement.executeUpdate();
+
+            FriendSystem.getDatabase().disconnect();
+        } catch (SQLException e) {
+            fromPlayer.sendMessage("§cThere was an error while saving to database");
+            plugin.getLogger().severe("MySQL-ERROR while inserting into friends: " + e.getMessage());
         }
     }
 }
