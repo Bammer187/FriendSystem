@@ -14,7 +14,9 @@ import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import static net.kyori.adventure.text.Component.text;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
 
@@ -43,6 +45,21 @@ public class FriendAddCommandExecutor implements CommandExecutor {
             player.sendMessage("§cYou can't add yourself.");
             return true;
         }
+
+        try {
+            if (!canSendRequest(player, friend)) {
+                player.sendMessage("§cYou already sent a friend request to this player.");
+                return false;
+            } else if (!canSendRequest(friend, player)) {
+                player.sendMessage("§cYou already have a friend request from this player.");
+                return false;
+            }
+        } catch (SQLException e) {
+            player.sendMessage("§cDatabase error while checking existing friend requests.");
+            plugin.getLogger().severe("MySQL-ERROR while checking for existing friend request: " + e.getMessage());
+            return false;
+        }
+
 
         try {
             insertRequestIntoDatabase(player, friend);
@@ -79,6 +96,25 @@ public class FriendAddCommandExecutor implements CommandExecutor {
         } catch (SQLException e) {
             fromPlayer.sendMessage("§cThere was an error while saving to database");
             plugin.getLogger().severe("MySQL-ERROR while inserting into open_friend_requests" + e.getMessage());
+        }
+    }
+
+    private boolean canSendRequest(Player fromPlayer, Player toPlayer) throws SQLException{
+        String query = """
+        SELECT 1 FROM open_friend_requests
+        WHERE player_uuid = ? AND from_player_uuid = ?
+        LIMIT 1
+        """;
+
+        try (Connection conn = FriendSystem.getDatabase().getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+
+            ps.setString(1, toPlayer.getUniqueId().toString());
+            ps.setString(2, fromPlayer.getUniqueId().toString());
+
+            try (ResultSet rs = ps.executeQuery()) {
+                return !rs.next();
+            }
         }
     }
 }
