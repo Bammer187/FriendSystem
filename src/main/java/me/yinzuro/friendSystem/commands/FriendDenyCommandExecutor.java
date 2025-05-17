@@ -13,6 +13,12 @@ public class FriendDenyCommandExecutor implements CommandExecutor {
             commandSender.sendMessage("§cYou aren't a player");
             return true;
         }
+
+        if (strings.length != 1) {
+            player.sendMessage("§cUsage: /friend deny <Player>");
+            return true;
+        }
+
         return false;
     }
 }
