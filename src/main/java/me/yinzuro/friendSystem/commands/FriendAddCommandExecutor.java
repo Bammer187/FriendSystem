@@ -44,6 +44,12 @@ public class FriendAddCommandExecutor implements CommandExecutor {
             return true;
         }
 
+        try {
+            insertRequestIntoDatabase(player, friend);
+        } catch (SQLException e) {
+            return true;
+        }
+
         player.sendMessage("§aSend friend request to " + friend.getName());
 
         Component message = text("§aYou've gotten a friend request from " + player.getName() + " ")
