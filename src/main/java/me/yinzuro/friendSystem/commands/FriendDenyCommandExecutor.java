@@ -9,7 +9,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.UUID;
 
 public class FriendDenyCommandExecutor implements CommandExecutor {
 
@@ -38,6 +40,8 @@ public class FriendDenyCommandExecutor implements CommandExecutor {
 
         try {
             denyRequest(friend, player);
+            player.sendMessage("§cYou denied the friend request from " + friend.getName());
+            friend.sendMessage(player.getName() + " has denied your friend request.");
         } catch (SQLException e) {
             player.sendMessage("§cThere was an error while denying the request.");
             plugin.getLogger().severe("MySQL-ERROR while trying to delete from open_friend_requests: " + e.getMessage());
@@ -47,6 +51,17 @@ public class FriendDenyCommandExecutor implements CommandExecutor {
     }
 
     private void denyRequest(Player fromPlayer, Player toPlayer) throws SQLException {
+        try (PreparedStatement statement = FriendSystem.getDatabase().getConnection().prepareStatement("""
+                DELETE FROM open_friend_requests WHERE player_uuid = ? AND from_player_uuid = ?;""")) {
 
+            UUID playerUUID = fromPlayer.getUniqueId();
+            UUID friendUUID = toPlayer.getUniqueId();
+
+            statement.setString(1, friendUUID.toString());
+            statement.setString(2, playerUUID.toString());
+            statement.executeUpdate();
+
+            FriendSystem.getDatabase().disconnect();
+        }
     }
 }
