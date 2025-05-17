@@ -32,4 +32,8 @@ public final class FriendSystem extends JavaPlugin {
             database.disconnect();
         }
     }
+
+    public DatabaseManager getDatabase() {
+        return database;
+    }
 }
