@@ -12,3 +12,4 @@
 10. () ISSUE-010: friend deny command
 11. (X) ISSUE-011: DatabaseManager Class
 12. (X) ISSUE-012: Create callable instance of FriendSystem Class
+13. () ISSUE-013: Save player UUID on first join
