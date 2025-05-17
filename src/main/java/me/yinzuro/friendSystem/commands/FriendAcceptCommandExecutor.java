@@ -39,6 +39,8 @@ public class FriendAcceptCommandExecutor implements CommandExecutor {
            if (checkIfThereIsRequest(player, friend)) {
                 try {
                     addFriend(friend, player);
+                    player.sendMessage("§aYou are now friends with " + friend.getName() + ".");
+                    friend.sendMessage("§aYou are now friends with " + player.getName() + ".");
                 } catch (SQLException e) {
                     player.sendMessage("§c There was an error while trying to accept the request.");
                     plugin.getLogger().severe("§cMySQL-ERROR while accepting a friend request: " + e.getMessage());
