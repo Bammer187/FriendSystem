@@ -10,4 +10,4 @@
 8. () ISSUE-008: FriendCommandExecutor Class to handle subcommands
 9. () ISSUE-009: friend accept command
 10. () ISSUE-010: friend deny command
-11. () ISSUE-011: DatabaseManager Class
+11. (X) ISSUE-011: DatabaseManager Class

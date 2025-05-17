@@ -28,5 +28,8 @@ public final class FriendSystem extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+        if (database != null && database.isConnected()) {
+            database.disconnect();
+        }
     }
 }
