@@ -13,6 +13,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.UUID;
 
 public class FriendAcceptCommandExecutor implements CommandExecutor {
 
@@ -21,7 +22,7 @@ public class FriendAcceptCommandExecutor implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String @NotNull [] strings) {
         if (!(commandSender instanceof Player player)) {
-            commandSender.sendMessage("§cYou aren't a player");
+            commandSender.sendMessage("§cYou aren't a player.");
             return true;
         }
 
@@ -33,13 +34,18 @@ public class FriendAcceptCommandExecutor implements CommandExecutor {
 
         try {
            if (checkIfThereIsRequest(friend, player)) {
-                addFriend(player, friend);
+                try {
+                    addFriend(friend, player);
+                } catch (SQLException e) {
+                    player.sendMessage("§c There was an error while trying to accept the request.");
+                    plugin.getLogger().severe("§cMySQL-ERROR while accepting a friend request.");
+                }
            } else {
-               player.sendMessage("§cYou don't have an open request from this player");
+               player.sendMessage("§cYou don't have an open request from this player.");
            }
         } catch (SQLException e) {
-            player.sendMessage("§cThere was an error while accepting the request");
-            plugin.getLogger().severe("§cMySQL-ERROR while getting friend request");
+            player.sendMessage("§cThere was an error while accepting the request.");
+            plugin.getLogger().severe("§cMySQL-ERROR while getting friend request.");
         }
 
         return false;
@@ -49,7 +55,7 @@ public class FriendAcceptCommandExecutor implements CommandExecutor {
         String query = """
         SELECT 1 FROM open_friend_requests
         WHERE player_uuid = ? AND from_player_uuid = ?
-        LIMIT 1
+        LIMIT 1;
         """;
 
         try (Connection conn = FriendSystem.getDatabase().getConnection();
@@ -64,7 +70,22 @@ public class FriendAcceptCommandExecutor implements CommandExecutor {
         }
     }
 
-    private void addFriend(Player player1, Player player2) {
+    private void addFriend(Player fromPlayer, Player toPlayer) throws SQLException {
 
+        try (PreparedStatement statement = FriendSystem.getDatabase().getConnection().prepareStatement("""
+                DELETE FROM open_friend_requests WHERE player_uuid = ? AND from_player_uuid = ?;""")) {
+
+            UUID playerUUID = fromPlayer.getUniqueId();
+            UUID friendUUID = toPlayer.getUniqueId();
+
+            statement.setString(1, friendUUID.toString());
+            statement.setString(2, playerUUID.toString());
+            statement.executeUpdate();
+
+            FriendSystem.getDatabase().disconnect();
+        } catch (SQLException e) {
+            fromPlayer.sendMessage("§cThere was an error while deleting from database");
+            plugin.getLogger().severe("MySQL-ERROR while deleting from open_friend_requests" + e.getMessage());
+        }
     }
 }

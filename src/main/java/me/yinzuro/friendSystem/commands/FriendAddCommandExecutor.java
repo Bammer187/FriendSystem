@@ -83,7 +83,7 @@ public class FriendAddCommandExecutor implements CommandExecutor {
 
     private void insertRequestIntoDatabase (Player fromPlayer, Player toPlayer) throws SQLException {
         try (PreparedStatement statement = FriendSystem.getDatabase().getConnection().prepareStatement("""
-                INSERT INTO open_friend_requests (player_uuid, from_player_uuid) VALUES (?, ?)""")) {
+                INSERT INTO open_friend_requests (player_uuid, from_player_uuid) VALUES (?, ?);""")) {
 
             UUID playerUUID = fromPlayer.getUniqueId();
             UUID friendUUID = toPlayer.getUniqueId();
@@ -103,7 +103,7 @@ public class FriendAddCommandExecutor implements CommandExecutor {
         String query = """
         SELECT 1 FROM open_friend_requests
         WHERE player_uuid = ? AND from_player_uuid = ?
-        LIMIT 1
+        LIMIT 1;
         """;
 
         try (Connection conn = FriendSystem.getDatabase().getConnection();
