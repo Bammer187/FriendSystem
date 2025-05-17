@@ -2,6 +2,7 @@ package me.yinzuro.friendSystem;
 
 import me.yinzuro.friendSystem.database.DatabaseManager;
 import me.yinzuro.friendSystem.commands.FriendCommandExecutor;
+import me.yinzuro.friendSystem.listener.PlayerJoinListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class FriendSystem extends JavaPlugin {
@@ -24,6 +25,7 @@ public final class FriendSystem extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
         }
 
+        getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
         getCommand("friend").setExecutor(new FriendCommandExecutor());
     }
 
