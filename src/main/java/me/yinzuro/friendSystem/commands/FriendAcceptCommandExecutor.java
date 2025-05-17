@@ -31,6 +31,17 @@ public class FriendAcceptCommandExecutor implements CommandExecutor {
             return true;
         }
 
+        try {
+           if (checkIfThereIsRequest(friend, player)) {
+                addFriend(player, friend);
+           } else {
+               player.sendMessage("§cYou don't have an open request from this player");
+           }
+        } catch (SQLException e) {
+            player.sendMessage("§cThere was an error while accepting the request");
+            plugin.getLogger().severe("§cMySQL-ERROR while getting friend request");
+        }
+
         return false;
     }
 
@@ -51,5 +62,9 @@ public class FriendAcceptCommandExecutor implements CommandExecutor {
                 return !rs.next();
             }
         }
+    }
+
+    private void addFriend(Player player1, Player player2) {
+
     }
 }
