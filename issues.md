@@ -9,7 +9,7 @@
 7. () ISSUE-007: Create a UI for list command
 8. () ISSUE-008: FriendCommandExecutor Class to handle subcommands
 9. (X) ISSUE-009: friend accept command
-10. () ISSUE-010: friend deny command
+10. (X) ISSUE-010: friend deny command
 11. (X) ISSUE-011: DatabaseManager Class
 12. (X) ISSUE-012: Create callable instance of FriendSystem Class
 13. (X) ISSUE-013: Save player UUID on first join

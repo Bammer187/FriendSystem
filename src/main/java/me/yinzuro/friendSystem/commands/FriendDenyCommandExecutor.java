@@ -41,14 +41,22 @@ public class FriendDenyCommandExecutor implements CommandExecutor {
         }
 
         try {
-            denyRequest(friend, player);
-            player.sendMessage("§cYou denied the friend request from " + friend.getName());
-            friend.sendMessage("§c" + player.getName() + " has denied your friend request.");
+            if (checkIfThereIsRequest(friend, player)) {
+                try {
+                    denyRequest(friend, player);
+                    player.sendMessage("§cYou denied the friend request from " + friend.getName());
+                    friend.sendMessage("§c" + player.getName() + " has denied your friend request.");
+                } catch (SQLException e) {
+                    player.sendMessage("§cThere was an error while denying the request.");
+                    plugin.getLogger().severe("MySQL-ERROR while trying to delete from open_friend_requests: " + e.getMessage());
+                }
+            } else {
+                player.sendMessage("§cYou don't have an open request from this player.");
+            }
         } catch (SQLException e) {
             player.sendMessage("§cThere was an error while denying the request.");
-            plugin.getLogger().severe("MySQL-ERROR while trying to delete from open_friend_requests: " + e.getMessage());
+            plugin.getLogger().severe("§cMySQL-ERROR while getting friend request: " + e.getMessage());
         }
-
         return false;
     }
 
