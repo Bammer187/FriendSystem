@@ -1,5 +1,6 @@
 package me.yinzuro.friendSystem.commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -16,6 +17,15 @@ public class FriendDenyCommandExecutor implements CommandExecutor {
 
         if (strings.length != 1) {
             player.sendMessage("§cUsage: /friend deny <Player>");
+            return true;
+        }
+
+        Player friend = Bukkit.getPlayerExact(strings[0]);
+        if (friend == null) {
+            player.sendMessage("§cCouldn't find a player with the given name.");
+            return true;
+        } else if (friend == player) {
+            player.sendMessage("§cYou can't deny yourself.");
             return true;
         }
 
