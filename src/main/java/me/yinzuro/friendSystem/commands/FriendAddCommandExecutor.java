@@ -66,13 +66,13 @@ public class FriendAddCommandExecutor implements CommandExecutor {
 
     private void insertRequestIntoDatabase (Player fromPlayer, Player toPlayer) throws SQLException {
         try (PreparedStatement statement = FriendSystem.getDatabase().getConnection().prepareStatement("""
-                INSERT INTO open_friend_requests (player_uuid, friend_uuid) VALUES (?, ?)""")) {
+                INSERT INTO open_friend_requests (player_uuid, from_player_uuid) VALUES (?, ?)""")) {
 
             UUID playerUUID = fromPlayer.getUniqueId();
             UUID friendUUID = toPlayer.getUniqueId();
 
-            statement.setString(1, playerUUID.toString());
-            statement.setString(2, friendUUID.toString());
+            statement.setString(1, friendUUID.toString());
+            statement.setString(2, playerUUID.toString());
             statement.executeUpdate();
         } catch (SQLException e) {
             fromPlayer.sendMessage("§cThere was an error while saving to database");
