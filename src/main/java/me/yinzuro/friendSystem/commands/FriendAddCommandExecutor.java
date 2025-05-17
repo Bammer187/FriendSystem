@@ -48,7 +48,7 @@ public class FriendAddCommandExecutor implements CommandExecutor {
 
         try {
             if (!canSendRequest(player, friend)) {
-                player.sendMessage("§cYou already sent a friend request to this player.");
+                player.sendMessage("§cYou already sent a friend request to this player or are already friends with them.");
                 return false;
             } else if (!canSendRequest(friend, player)) {
                 player.sendMessage("§cYou already have a friend request from this player.");
@@ -99,22 +99,50 @@ public class FriendAddCommandExecutor implements CommandExecutor {
         }
     }
 
-    private boolean canSendRequest(Player fromPlayer, Player toPlayer) throws SQLException{
+    private boolean canSendRequest(Player fromPlayer, Player toPlayer) throws SQLException {
+        UUID fromUUID = fromPlayer.getUniqueId();
+        UUID toUUID = toPlayer.getUniqueId();
+
         String query = """
         SELECT 1 FROM open_friend_requests
         WHERE player_uuid = ? AND from_player_uuid = ?
         LIMIT 1;
         """;
 
-        try (Connection conn = FriendSystem.getDatabase().getConnection();
-             PreparedStatement ps = conn.prepareStatement(query)) {
+        String checkFriendshipQuery = """
+        SELECT 1 FROM friends
+        WHERE (player_uuid = ? AND friend_uuid = ?)
+           OR (player_uuid = ? AND friend_uuid = ?)
+        LIMIT 1;
+        """;
 
-            ps.setString(1, toPlayer.getUniqueId().toString());
-            ps.setString(2, fromPlayer.getUniqueId().toString());
+        try (Connection conn = FriendSystem.getDatabase().getConnection()) {
+            // Check for existing open friend request
+            try (PreparedStatement ps = conn.prepareStatement(query)) {
+                ps.setString(1, toUUID.toString());
+                ps.setString(2, fromUUID.toString());
 
-            try (ResultSet rs = ps.executeQuery()) {
-                return !rs.next();
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        return false;
+                    }
+                }
             }
+
+            try (PreparedStatement ps = conn.prepareStatement(checkFriendshipQuery)) {
+                ps.setString(1, fromUUID.toString());
+                ps.setString(2, toUUID.toString());
+                ps.setString(3, toUUID.toString());
+                ps.setString(4, fromUUID.toString());
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
         }
     }
 }
