@@ -22,6 +22,11 @@ public class PlayerJoinListener implements Listener {
                 """
                 INSERT IGNORE INTO players (uuid) VALUES (?);
                 """,
+                """
+                INSERT INTO last_message (player_uuid, friend_uuid)
+                VALUES (?, NULL)
+                ON DUPLICATE KEY UPDATE friend_uuid = NULL;
+                """
         };
 
         try (Connection connection = FriendSystem.getDatabase().getConnection()) {
