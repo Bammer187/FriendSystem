@@ -35,6 +35,11 @@ public class FriendRemoveCommandExecutor implements CommandExecutor {
     }
 
     private boolean canRemoveFriend(Player fromPlayer, Player toPlayer) throws SQLException {
+        String query = """
+        SELECT 1 FROM friends
+        WHERE player_uuid = ? AND friend_uuid = ?
+        LIMIT 1;
+        """;
         return false;
     }
 }
