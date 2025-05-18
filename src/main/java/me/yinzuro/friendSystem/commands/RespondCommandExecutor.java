@@ -32,11 +32,11 @@ public class RespondCommandExecutor implements CommandExecutor {
             UUID lastMessaged = getLastFriendMessagedUUID(player);
             if (lastMessaged != null) {
                 Player friend = Bukkit.getPlayer(lastMessaged);
-                MessageUtils.sendPrivateMessage(player, friend, strings[0]);
                 if (friend == null) {
                     player.sendMessage("§cThe player is not online.");
                     return true;
                 }
+                MessageUtils.sendPrivateMessage(player, friend, strings[0]);
             } else {
                 player.sendMessage("You didn't write with a player.");
             }
