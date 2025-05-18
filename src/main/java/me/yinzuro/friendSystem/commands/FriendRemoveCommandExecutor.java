@@ -7,6 +7,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.sql.SQLException;
+
 public class FriendRemoveCommandExecutor implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String @NotNull [] strings) {
@@ -29,6 +31,10 @@ public class FriendRemoveCommandExecutor implements CommandExecutor {
             return true;
         }
 
+        return false;
+    }
+
+    private boolean canRemoveFriend(Player fromPlayer, Player toPlayer) throws SQLException {
         return false;
     }
 }
