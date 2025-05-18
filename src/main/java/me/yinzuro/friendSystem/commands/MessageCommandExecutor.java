@@ -1,6 +1,7 @@
 package me.yinzuro.friendSystem.commands;
 
 import me.yinzuro.friendSystem.FriendSystem;
+import me.yinzuro.friendSystem.utils.MessageUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -40,58 +41,12 @@ public class MessageCommandExecutor implements CommandExecutor {
         }
 
         try {
-            if(checkIfPlayerAreFriends(player, friend)) {
-                player.sendMessage("§7You " + "§3» " + "§7" + friend.getName() + ": " + strings[1]);
-                friend.sendMessage("§7" + player.getName() + "§3 » " + "§7" + "You: " + strings[1]);
-                saveToDatabaseLastMessage(player, friend);
-            } else {
-                player.sendMessage("§cYou aren't friends with " + friend.getName());
-            }
+                MessageUtils.sendPrivateMessage(player, friend, strings[1]);
         } catch (SQLException e) {
             player.sendMessage("§cThere was an error while trying to send the message");
             plugin.getLogger().severe("MySQL-ERROR while reading from friends: " + e.getMessage());
         }
 
         return false;
-    }
-
-    private boolean checkIfPlayerAreFriends(Player player1, Player player2) throws SQLException {
-        String query = """
-        SELECT 1 FROM friends
-        WHERE player_uuid = ? AND friend_uuid = ?
-        LIMIT 1;
-        """;
-
-        try (Connection connection = FriendSystem.getDatabase().getConnection()) {
-            PreparedStatement ps = connection.prepareStatement(query);
-
-            ps.setString(1, player1.getUniqueId().toString());
-            ps.setString(2, player2.getUniqueId().toString());
-
-            try (ResultSet rs = ps.executeQuery()) {
-                FriendSystem.getDatabase().disconnect();
-                return rs.next();
-            }
-        }
-    }
-
-    private void saveToDatabaseLastMessage(Player player1, Player player2) throws SQLException {
-        String query = """
-        UPDATE last_message
-        SET friend_uuid = ?
-        WHERE player_uuid = ?;
-        """;
-
-        try (Connection connection = FriendSystem.getDatabase().getConnection()) {
-            PreparedStatement ps = connection.prepareStatement(query);
-
-            ps.setString(1, player1.getUniqueId().toString());
-            ps.setString(2, player2.getUniqueId().toString());
-            ps.execute();
-
-            ps.setString(1, player2.getUniqueId().toString());
-            ps.setString(2, player1.getUniqueId().toString());
-            ps.execute();
-        }
     }
 }
