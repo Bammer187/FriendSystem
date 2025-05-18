@@ -10,6 +10,10 @@ import java.sql.SQLException;
 
 public class MessageUtils {
 
+    public static void sendPrivateMessage(Player fromPlayer, Player toPlayer, String message) throws SQLException {
+
+    }
+
     private static boolean checkIfPlayersAreFriends(Player player1, Player player2) throws SQLException {
         String query = "SELECT 1 FROM friends WHERE player_uuid = ? AND friend_uuid = ? LIMIT 1;";
         try (Connection conn = FriendSystem.getDatabase().getConnection();
