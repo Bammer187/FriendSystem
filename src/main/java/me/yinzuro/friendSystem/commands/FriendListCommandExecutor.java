@@ -68,6 +68,13 @@ public class FriendListCommandExecutor implements CommandExecutor {
             allFriendNames.addAll(onlineFriends);
             allFriendNames.addAll(offlineFriends);
 
+            double MAX_PLAYERS_PER_PAGE = 5.0;
+            int totalPages = (int) Math.ceil(allFriendNames.size() / MAX_PLAYERS_PER_PAGE);
+            if (page > totalPages) {
+                player.sendMessage("§cPage does not exist. Max: " + totalPages);
+                return true;
+            }
+
         } catch (SQLException e) {
             player.sendMessage("§cThere was an error while displaying your friend list.");
             plugin.getLogger().severe("MySQL-ERROR while reading from friends: " + e.getMessage());
