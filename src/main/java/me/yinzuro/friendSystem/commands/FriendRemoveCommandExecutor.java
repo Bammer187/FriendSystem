@@ -56,4 +56,8 @@ public class FriendRemoveCommandExecutor implements CommandExecutor {
             }
         }
     }
+
+    private void removeFriend(Player player1, Player player2) throws SQLException {
+
+    }
 }
