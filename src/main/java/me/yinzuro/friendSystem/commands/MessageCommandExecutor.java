@@ -1,5 +1,6 @@
 package me.yinzuro.friendSystem.commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -16,6 +17,15 @@ public class MessageCommandExecutor implements CommandExecutor {
 
         if (strings.length != 2) {
             player.sendMessage("§cUsage: /message <Player> <message>");
+            return true;
+        }
+
+        Player friend = Bukkit.getPlayerExact(strings[0]);
+        if (friend == null) {
+            player.sendMessage("§cCouldn't find a player with the given name.");
+            return true;
+        } else if (friend == player) {
+            player.sendMessage("§cYou can't message yourself.");
             return true;
         }
 
