@@ -43,6 +43,7 @@ public class MessageCommandExecutor implements CommandExecutor {
             if(checkIfPlayerAreFriends(player, friend)) {
                 player.sendMessage("§7You " + "§3» " + "§7" + friend.getName() + ": " + strings[1]);
                 friend.sendMessage("§7" + player.getName() + "§3 » " + "§7" + "You: " + strings[1]);
+                saveToDatabaseLastMessage(player, friend);
             } else {
                 player.sendMessage("§cYou aren't friends with " + friend.getName());
             }
@@ -61,8 +62,8 @@ public class MessageCommandExecutor implements CommandExecutor {
         LIMIT 1;
         """;
 
-        try (Connection conn = FriendSystem.getDatabase().getConnection();
-             PreparedStatement ps = conn.prepareStatement(query)) {
+        try (Connection connection = FriendSystem.getDatabase().getConnection()) {
+            PreparedStatement ps = connection.prepareStatement(query);
 
             ps.setString(1, player1.getUniqueId().toString());
             ps.setString(2, player2.getUniqueId().toString());
@@ -75,6 +76,22 @@ public class MessageCommandExecutor implements CommandExecutor {
     }
 
     private void saveToDatabaseLastMessage(Player player1, Player player2) throws SQLException {
+        String query = """
+        UPDATE last_message
+        SET friend_uuid = ?
+        WHERE player_uuid = ?;
+        """;
 
+        try (Connection connection = FriendSystem.getDatabase().getConnection()) {
+            PreparedStatement ps = connection.prepareStatement(query);
+
+            ps.setString(1, player1.getUniqueId().toString());
+            ps.setString(2, player2.getUniqueId().toString());
+            ps.execute();
+
+            ps.setString(1, player2.getUniqueId().toString());
+            ps.setString(2, player1.getUniqueId().toString());
+            ps.execute();
+        }
     }
 }
