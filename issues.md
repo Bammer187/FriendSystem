@@ -14,3 +14,4 @@
 12. (X) ISSUE-012: Create callable instance of FriendSystem Class
 13. (X) ISSUE-013: Save player UUID on first join
 14. () ISSUE-014: make subcommands tabbable
+15. () ISSUE-015: make commands work even if one player isn't online
