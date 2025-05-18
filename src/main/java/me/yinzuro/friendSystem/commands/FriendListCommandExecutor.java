@@ -1,6 +1,8 @@
 package me.yinzuro.friendSystem.commands;
 
 import me.yinzuro.friendSystem.FriendSystem;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -42,12 +44,23 @@ public class FriendListCommandExecutor implements CommandExecutor {
         }
         try {
             List<UUID> friends = getAllFriends(player);
+            List<Player> onlineFriends = new ArrayList<>();
+            List<OfflinePlayer> offlineFriends = new ArrayList<>();
+
+            for (UUID friendUUID : friends) {
+                Player friend = Bukkit.getPlayer(friendUUID);
+                if (friend != null && friend.isOnline()) {
+                    onlineFriends.add(friend);
+                } else {
+                    offlineFriends.add(Bukkit.getOfflinePlayer(friendUUID));
+                }
+            }
         } catch (SQLException e) {
             player.sendMessage("§cThere was an error while displaying your friend list.");
             plugin.getLogger().severe("MySQL-ERROR while reading from friends: " + e.getMessage());
         }
 
-        player.sendMessage("§7[§4Friends]§7] List of your friends: §3Page " + friendListPage);
+        player.sendMessage("§7[§4Friends§7] List of your friends: §3Page " + friendListPage);
 
         return true;
     }
