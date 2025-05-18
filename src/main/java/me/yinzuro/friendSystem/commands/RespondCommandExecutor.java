@@ -14,6 +14,11 @@ public class RespondCommandExecutor implements CommandExecutor {
             return true;
         }
 
+        if (strings.length != 1) {
+            player.sendMessage("§cUsage: /respond <message>");
+            return true;
+        }
+
         return false;
     }
 }
