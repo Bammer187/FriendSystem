@@ -1,5 +1,6 @@
 package me.yinzuro.friendSystem.commands;
 
+import me.yinzuro.friendSystem.FriendSystem;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -7,6 +8,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class FriendRemoveCommandExecutor implements CommandExecutor {
@@ -34,12 +38,22 @@ public class FriendRemoveCommandExecutor implements CommandExecutor {
         return false;
     }
 
-    private boolean canRemoveFriend(Player fromPlayer, Player toPlayer) throws SQLException {
+    private boolean canRemoveFriend(Player player1, Player player2) throws SQLException {
         String query = """
         SELECT 1 FROM friends
         WHERE player_uuid = ? AND friend_uuid = ?
         LIMIT 1;
         """;
-        return false;
+
+        try (Connection conn = FriendSystem.getDatabase().getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+
+            ps.setString(1, player1.getUniqueId().toString());
+            ps.setString(2, player2.getUniqueId().toString());
+
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+        }
     }
 }
