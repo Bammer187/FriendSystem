@@ -6,6 +6,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
@@ -14,6 +15,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class MessageCommandExecutor implements CommandExecutor {
+
+    private final JavaPlugin plugin = FriendSystem.getInstance();
+
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String @NotNull [] strings) {
         if (!(commandSender instanceof Player player)) {
@@ -33,6 +37,16 @@ public class MessageCommandExecutor implements CommandExecutor {
         } else if (friend == player) {
             player.sendMessage("§cYou can't message yourself.");
             return true;
+        }
+
+        try {
+            if(checkIfPlayerAreFriends(player, friend)) {
+                player.sendMessage("§7You " + "§3» " + "§7" + friend.getName() + ": " + strings[1]);
+                friend.sendMessage("§7" + player.getName() + "§3 » " + "§7" + "You: " + strings[1]);
+            }
+        } catch (SQLException e) {
+            player.sendMessage("§cThere was an error while trying to send the message");
+            plugin.getLogger().severe("MySQL-ERROR while reading from friends: " + e.getMessage());
         }
 
         return false;
