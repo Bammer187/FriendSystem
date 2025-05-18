@@ -52,17 +52,22 @@ public class FriendListCommandExecutor implements CommandExecutor {
             }
 
             List<UUID> friends = getAllFriends(player);
-            List<Player> onlineFriends = new ArrayList<>();
-            List<OfflinePlayer> offlineFriends = new ArrayList<>();
+            List<String> onlineFriends = new ArrayList<>();
+            List<String> offlineFriends = new ArrayList<>();
 
             for (UUID friendUUID : friends) {
                 Player friend = Bukkit.getPlayer(friendUUID);
                 if (friend != null && friend.isOnline()) {
-                    onlineFriends.add(friend);
+                    onlineFriends.add(friend.getName());
                 } else {
-                    offlineFriends.add(Bukkit.getOfflinePlayer(friendUUID));
+                    offlineFriends.add(Bukkit.getOfflinePlayer(friendUUID).getName());
                 }
             }
+
+            List<String> allFriendNames = new ArrayList<>();
+            allFriendNames.addAll(onlineFriends);
+            allFriendNames.addAll(offlineFriends);
+
         } catch (SQLException e) {
             player.sendMessage("§cThere was an error while displaying your friend list.");
             plugin.getLogger().severe("MySQL-ERROR while reading from friends: " + e.getMessage());
