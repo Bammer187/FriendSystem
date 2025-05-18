@@ -50,6 +50,8 @@ public class FriendRemoveCommandExecutor implements CommandExecutor {
                     player.sendMessage("§cThere was an error while deleting this friend.");
                     plugin.getLogger().severe("MySQL-ERROR while deleting from friends: " + e.getMessage());
                 }
+            } else {
+                player.sendMessage("§cYou aren't friends with this player.");
             }
         } catch (SQLException e) {
             player.sendMessage("§cThere was an error while deleting this friend.");
