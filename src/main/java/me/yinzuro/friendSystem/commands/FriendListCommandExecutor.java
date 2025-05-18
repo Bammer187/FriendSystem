@@ -87,7 +87,7 @@ public class FriendListCommandExecutor implements CommandExecutor {
                 } else {
                     onlineStatus = "§cOFFLINE";
                 }
-                player.sendMessage("§7" + allFriendNames.get(i) + "§3» " + onlineStatus);
+                player.sendMessage("§7" + allFriendNames.get(i) + " §3» " + onlineStatus);
             }
 
         } catch (SQLException e) {
