@@ -18,13 +18,18 @@ public class PlayerJoinListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         UUID uuid = event.getPlayer().getUniqueId();
+        String[] statements = {
+                """
+                INSERT IGNORE INTO players (uuid) VALUES (?);
+                """,
+        };
 
-        try (Connection connection = FriendSystem.getDatabase().getConnection();
-             PreparedStatement statement = connection.prepareStatement(
-                     "INSERT IGNORE INTO players (uuid) VALUES (?)")) {
-
-            statement.setString(1, uuid.toString());
-            statement.executeUpdate();
+        try (Connection connection = FriendSystem.getDatabase().getConnection()) {
+            for(String statement : statements) {
+                PreparedStatement ps = connection.prepareStatement(statement);
+                ps.setString(1, uuid.toString());
+                ps.execute();
+            }
             FriendSystem.getDatabase().disconnect();
         } catch (SQLException e) {
             plugin.getLogger().severe("Failed to insert player into database: "  + e.getMessage());
