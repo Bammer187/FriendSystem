@@ -36,6 +36,9 @@ public class FriendListCommandExecutor implements CommandExecutor {
     }
 
     private UUID[] getAllFriends(Player player) throws SQLException {
-
+        String query = """
+        SELECT FROM friends
+        WHERE player_uuid = ?;
+        """;
     }
 }
