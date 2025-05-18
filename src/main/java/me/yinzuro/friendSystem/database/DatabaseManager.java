@@ -81,7 +81,7 @@ public class DatabaseManager {
                 );
                 """,
                 """
-                CREATE TABLE last_message (
+                CREATE TABLE IF NOT EXISTS last_message (
                     player_uuid CHAR(36) PRIMARY KEY,
                     friend_uuid CHAR(36),
                     FOREIGN KEY (player_uuid) REFERENCES players(uuid),
