@@ -58,6 +58,9 @@ public class FriendRemoveCommandExecutor implements CommandExecutor {
     }
 
     private void removeFriend(Player player1, Player player2) throws SQLException {
-
+        String query = """
+        DELETE FROM friends
+        WHERE player_uuid = ? AND friend_uuid = ?;
+        """;
     }
 }
