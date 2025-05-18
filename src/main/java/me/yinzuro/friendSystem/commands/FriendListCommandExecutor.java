@@ -69,18 +69,31 @@ public class FriendListCommandExecutor implements CommandExecutor {
             allFriendNames.addAll(offlineFriends);
 
             double MAX_PLAYERS_PER_PAGE = 5.0;
-            int totalPages = (int) Math.ceil(allFriendNames.size() / MAX_PLAYERS_PER_PAGE);
+            int totalPages = (int) Math.ceil((double) allFriendNames.size() / MAX_PLAYERS_PER_PAGE);
             if (page > totalPages) {
                 player.sendMessage("§cPage does not exist. Max: " + totalPages);
                 return true;
+            }
+
+            player.sendMessage("§6Your Friends §8(Page " + page + "/" + totalPages + "):");
+
+            int start = (page - 1) * 5;
+            int end = Math.min(start + 5, allFriendNames.size());
+            String onlineStatus = "";
+
+            for (int i = start; i < end; i++) {
+                if(onlineFriends.contains(allFriendNames.get(i))) {
+                    onlineStatus = "§aONLINE";
+                } else {
+                    onlineStatus = "§cOFFLINE";
+                }
+                player.sendMessage("§7" + allFriendNames.get(i) + "§3» " + onlineStatus);
             }
 
         } catch (SQLException e) {
             player.sendMessage("§cThere was an error while displaying your friend list.");
             plugin.getLogger().severe("MySQL-ERROR while reading from friends: " + e.getMessage());
         }
-
-        player.sendMessage("§7[§4Friends§7] List of your friends: §3Page " + friendListPage);
 
         return true;
     }
