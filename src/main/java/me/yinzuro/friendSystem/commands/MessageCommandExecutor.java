@@ -14,6 +14,11 @@ public class MessageCommandExecutor implements CommandExecutor {
             return true;
         }
 
+        if (strings.length != 2) {
+            player.sendMessage("§cUsage: /message <Player> <message>");
+            return true;
+        }
+
         return false;
     }
 }
