@@ -6,3 +6,5 @@ commands:
   friend:
   message:
     aliases: ["msg"]
+  respond:
+    aliases: ["r"]

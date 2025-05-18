@@ -1,6 +1,7 @@
 package me.yinzuro.friendSystem.commands;
 
 import me.yinzuro.friendSystem.FriendSystem;
+import me.yinzuro.friendSystem.utils.MessageUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -31,7 +32,7 @@ public class RespondCommandExecutor implements CommandExecutor {
             UUID lastMessaged = getLastFriendMessagedUUID(player);
             if (lastMessaged != null) {
                 Player friend = Bukkit.getPlayer(lastMessaged);
-
+                MessageUtils.sendPrivateMessage(player, friend, strings[0]);
                 if (friend == null) {
                     player.sendMessage("§cThe player is not online.");
                     return true;

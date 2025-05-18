@@ -4,7 +4,7 @@
 2. (X) ISSUE-002: Create database where players and friends are saved in an n:m relationship
 3. (X) ISSUE-003: friend remove command
 4. (X) ISSUE-004: message command
-5. () ISSUE-005: respond command
+5. (X) ISSUE-005: respond command
 6. () ISSUE-006: list command to get all friends
 7. () ISSUE-007: Create a UI for list command
 8. () ISSUE-008: FriendCommandExecutor Class to handle subcommands
@@ -15,4 +15,4 @@
 13. (X) ISSUE-013: Save player UUID on first join
 14. () ISSUE-014: make subcommands tabable
 15. () ISSUE-015: make commands work even if one player isn't online
-16. () ISSUE-016: MessageUtils Class
+16. (X) ISSUE-016: MessageUtils Class
