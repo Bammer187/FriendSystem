@@ -13,6 +13,6 @@
 11. (X) ISSUE-011: DatabaseManager Class
 12. (X) ISSUE-012: Create callable instance of FriendSystem Class
 13. (X) ISSUE-013: Save player UUID on first join
-14. () ISSUE-014: make subcommands tabbable
+14. () ISSUE-014: make subcommands tabable
 15. () ISSUE-015: make commands work even if one player isn't online
-16. () ISSUE-016
+16. () ISSUE-016: MessageUtils Class
