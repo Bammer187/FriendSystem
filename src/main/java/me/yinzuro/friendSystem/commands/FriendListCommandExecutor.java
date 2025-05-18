@@ -1,12 +1,18 @@
 package me.yinzuro.friendSystem.commands;
 
+import me.yinzuro.friendSystem.FriendSystem;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class FriendListCommandExecutor implements CommandExecutor {
@@ -35,10 +41,29 @@ public class FriendListCommandExecutor implements CommandExecutor {
         return true;
     }
 
-    private UUID[] getAllFriends(Player player) throws SQLException {
+    private List<UUID> getAllFriends(Player player) throws SQLException {
         String query = """
-        SELECT FROM friends
+        SELECT friend_uuid FROM friends
         WHERE player_uuid = ?;
         """;
+
+        List<UUID> friendUUIDs = new ArrayList<>();
+
+        try (Connection connection = FriendSystem.getDatabase().getConnection();
+             PreparedStatement ps = connection.prepareStatement(query)) {
+
+            ps.setString(1, player.getUniqueId().toString());
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    String uuidStr = rs.getString("friend_uuid");
+                    if (uuidStr != null) {
+                        friendUUIDs.add(UUID.fromString(uuidStr));
+                    }
+                }
+            }
+        }
+
+        return friendUUIDs;
     }
 }
