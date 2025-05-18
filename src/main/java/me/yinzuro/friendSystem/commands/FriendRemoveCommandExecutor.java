@@ -44,7 +44,7 @@ public class FriendRemoveCommandExecutor implements CommandExecutor {
             if(canRemoveFriend(player, friend)) {
                 try {
                     removeFriend(player, friend);
-                    player.sendMessage("§aYou've ended the friendship with " + friend.getName());
+                    player.sendMessage("§aYou've ended the friendship with " + friend.getName() + ".");
                     friend.sendMessage("§c" + player.getName() + " has ended the friendship with you.");
                 } catch (SQLException e) {
                     player.sendMessage("§cThere was an error while deleting this friend.");

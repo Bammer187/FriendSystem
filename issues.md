@@ -2,7 +2,7 @@
 
 1. (X) ISSUE-001: friend add command
 2. (X) ISSUE-002: Create database where players and friends are saved in an n:m relationship
-3. () ISSUE-003: friend remove command
+3. (X) ISSUE-003: friend remove command
 4. () ISSUE-004: message command
 5. () ISSUE-005: respond command
 6. () ISSUE-006: list command to get all friends
@@ -13,3 +13,4 @@
 11. (X) ISSUE-011: DatabaseManager Class
 12. (X) ISSUE-012: Create callable instance of FriendSystem Class
 13. (X) ISSUE-013: Save player UUID on first join
+14. () ISSUE-014: make subcommands tabbable
