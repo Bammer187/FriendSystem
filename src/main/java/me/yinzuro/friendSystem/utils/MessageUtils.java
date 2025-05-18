@@ -11,7 +11,19 @@ import java.sql.SQLException;
 public class MessageUtils {
 
     public static void sendPrivateMessage(Player fromPlayer, Player toPlayer, String message) throws SQLException {
+        if (fromPlayer.equals(toPlayer)) {
+            fromPlayer.sendMessage("§cYou can't message yourself.");
+            return;
+        }
 
+        if (!checkIfPlayersAreFriends(fromPlayer, toPlayer)) {
+            fromPlayer.sendMessage("§cYou aren't friends with " + toPlayer.getName());
+            return;
+        }
+
+        fromPlayer.sendMessage("§7You §3» §7" + toPlayer.getName() + ": " + message);
+        toPlayer.sendMessage("§7" + fromPlayer.getName() + " §3» §7You: " + message);
+        saveToDatabaseLastMessage(fromPlayer, toPlayer);
     }
 
     private static boolean checkIfPlayersAreFriends(Player player1, Player player2) throws SQLException {
