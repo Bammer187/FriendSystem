@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.sql.SQLException;
 import java.util.UUID;
 
 public class FriendListCommandExecutor implements CommandExecutor {
@@ -32,5 +33,9 @@ public class FriendListCommandExecutor implements CommandExecutor {
         player.sendMessage("§7[§4Friends]§7] List of your friends: §3Page " + friendListPage);
 
         return true;
+    }
+
+    private UUID[] getAllFriends(Player player) throws SQLException {
+
     }
 }
