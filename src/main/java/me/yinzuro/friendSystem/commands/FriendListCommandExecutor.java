@@ -5,6 +5,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
@@ -16,6 +17,9 @@ import java.util.List;
 import java.util.UUID;
 
 public class FriendListCommandExecutor implements CommandExecutor {
+
+    private final JavaPlugin plugin = FriendSystem.getInstance();
+
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String @NotNull [] strings) {
         if (!(commandSender instanceof Player player)) {
@@ -36,6 +40,13 @@ public class FriendListCommandExecutor implements CommandExecutor {
             player.sendMessage("§cUsage /friend list <page>");
             return true;
         }
+        try {
+            List<UUID> friends = getAllFriends(player);
+        } catch (SQLException e) {
+            player.sendMessage("§cThere was an error while displaying your friend list.");
+            plugin.getLogger().severe("MySQL-ERROR while reading from friends: " + e.getMessage());
+        }
+
         player.sendMessage("§7[§4Friends]§7] List of your friends: §3Page " + friendListPage);
 
         return true;
