@@ -43,6 +43,8 @@ public class MessageCommandExecutor implements CommandExecutor {
             if(checkIfPlayerAreFriends(player, friend)) {
                 player.sendMessage("§7You " + "§3» " + "§7" + friend.getName() + ": " + strings[1]);
                 friend.sendMessage("§7" + player.getName() + "§3 » " + "§7" + "You: " + strings[1]);
+            } else {
+                player.sendMessage("§cYou aren't friends with " + friend.getName());
             }
         } catch (SQLException e) {
             player.sendMessage("§cThere was an error while trying to send the message");

@@ -1,5 +1,6 @@
 package me.yinzuro.friendSystem;
 
+import me.yinzuro.friendSystem.commands.MessageCommandExecutor;
 import me.yinzuro.friendSystem.database.DatabaseManager;
 import me.yinzuro.friendSystem.commands.FriendCommandExecutor;
 import me.yinzuro.friendSystem.listener.PlayerJoinListener;
@@ -27,6 +28,7 @@ public final class FriendSystem extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
         getCommand("friend").setExecutor(new FriendCommandExecutor());
+        getCommand("message").setExecutor(new MessageCommandExecutor());
     }
 
     @Override
