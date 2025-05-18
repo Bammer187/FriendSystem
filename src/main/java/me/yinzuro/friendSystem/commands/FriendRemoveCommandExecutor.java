@@ -15,6 +15,11 @@ public class FriendRemoveCommandExecutor implements CommandExecutor {
             return true;
         }
 
+        if (strings.length != 1) {
+            player.sendMessage("§cUsage: /friend remove <Player>");
+            return true;
+        }
+
         Player friend = Bukkit.getPlayerExact(strings[0]);
         if (friend == null) {
             player.sendMessage("§cCouldn't find a player with the given name.");
