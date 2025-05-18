@@ -1,5 +1,6 @@
 package me.yinzuro.friendSystem.commands;
 
+import me.yinzuro.friendSystem.FriendSystem;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -7,6 +8,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class MessageCommandExecutor implements CommandExecutor {
@@ -35,6 +39,22 @@ public class MessageCommandExecutor implements CommandExecutor {
     }
 
     private boolean checkIfPlayerAreFriends(Player player1, Player player2) throws SQLException {
-        return false;
+        String query = """
+        SELECT 1 FROM friends
+        WHERE player_uuid = ? AND friend_uuid = ?
+        LIMIT 1;
+        """;
+
+        try (Connection conn = FriendSystem.getDatabase().getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+
+            ps.setString(1, player1.getUniqueId().toString());
+            ps.setString(2, player2.getUniqueId().toString());
+
+            try (ResultSet rs = ps.executeQuery()) {
+                FriendSystem.getDatabase().disconnect();
+                return rs.next();
+            }
+        }
     }
 }
