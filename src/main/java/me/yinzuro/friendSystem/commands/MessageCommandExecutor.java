@@ -73,4 +73,8 @@ public class MessageCommandExecutor implements CommandExecutor {
             }
         }
     }
+
+    private void saveToDatabaseLastMessage(Player player1, Player player2) throws SQLException {
+
+    }
 }
