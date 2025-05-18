@@ -15,3 +15,4 @@
 13. (X) ISSUE-013: Save player UUID on first join
 14. () ISSUE-014: make subcommands tabbable
 15. () ISSUE-015: make commands work even if one player isn't online
+16. () ISSUE-016
