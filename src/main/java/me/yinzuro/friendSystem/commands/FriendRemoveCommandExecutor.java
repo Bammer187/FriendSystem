@@ -6,6 +6,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
@@ -15,6 +16,9 @@ import java.sql.SQLException;
 import java.util.UUID;
 
 public class FriendRemoveCommandExecutor implements CommandExecutor {
+
+    private final JavaPlugin plugin = FriendSystem.getInstance();
+
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String @NotNull [] strings) {
         if (!(commandSender instanceof Player player)) {
@@ -34,6 +38,22 @@ public class FriendRemoveCommandExecutor implements CommandExecutor {
         } else if (friend == player) {
             player.sendMessage("§cYou don't have yourself as friend.");
             return true;
+        }
+
+        try {
+            if(canRemoveFriend(player, friend)) {
+                try {
+                    removeFriend(player, friend);
+                    player.sendMessage("§aYou've ended the friendship with " + friend.getName());
+                    friend.sendMessage("§c" + player.getName() + " has ended the friendship with you.");
+                } catch (SQLException e) {
+                    player.sendMessage("§cThere was an error while deleting this friend.");
+                    plugin.getLogger().severe("MySQL-ERROR while deleting from friends: " + e.getMessage());
+                }
+            }
+        } catch (SQLException e) {
+            player.sendMessage("§cThere was an error while deleting this friend.");
+            plugin.getLogger().severe("MySQL-ERROR while selecting from friends: " + e.getMessage());
         }
 
         return false;
