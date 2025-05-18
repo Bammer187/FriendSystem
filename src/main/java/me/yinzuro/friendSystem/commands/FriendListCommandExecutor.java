@@ -29,7 +29,6 @@ public class FriendListCommandExecutor implements CommandExecutor {
             return true;
         }
 
-        UUID playerUUID = player.getUniqueId();
         String friendListPage = "";
 
         if (strings.length == 0) {
@@ -43,6 +42,15 @@ public class FriendListCommandExecutor implements CommandExecutor {
             return true;
         }
         try {
+            int page;
+            try {
+                page = Integer.parseInt(friendListPage);
+                if (page < 1) throw new NumberFormatException();
+            } catch (NumberFormatException e) {
+                player.sendMessage("§cInvalid page number.");
+                return true;
+            }
+
             List<UUID> friends = getAllFriends(player);
             List<Player> onlineFriends = new ArrayList<>();
             List<OfflinePlayer> offlineFriends = new ArrayList<>();
