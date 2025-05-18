@@ -79,6 +79,14 @@ public class DatabaseManager {
                     FOREIGN KEY (player_uuid) REFERENCES players(uuid),
                     FOREIGN KEY (from_player_uuid) REFERENCES players(uuid)
                 );
+                """,
+                """
+                CREATE TABLE last_message (
+                    player_uuid CHAR(36) PRIMARY KEY,
+                    friend_uuid CHAR(36),
+                    FOREIGN KEY (player_uuid) REFERENCES players(uuid),
+                    FOREIGN KEY (friend_uuid) REFERENCES players(uuid)
+                );
                 """
         };
 
