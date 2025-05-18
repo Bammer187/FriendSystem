@@ -11,6 +11,7 @@ public class FriendCommandExecutor implements CommandExecutor {
     private final FriendAcceptCommandExecutor acceptExecutor = new FriendAcceptCommandExecutor();
     private final FriendDenyCommandExecutor denyExecutor = new FriendDenyCommandExecutor();
     private final FriendRemoveCommandExecutor removeExecutor = new FriendRemoveCommandExecutor();
+    private final FriendListCommandExecutor listExecutor = new FriendListCommandExecutor();
 
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String @NotNull [] strings) {
@@ -35,6 +36,9 @@ public class FriendCommandExecutor implements CommandExecutor {
             }
             case "remove": {
                 return removeExecutor.onCommand(commandSender, command, s, subStrings);
+            }
+            case "list" : {
+                return listExecutor.onCommand(commandSender, command, s, subStrings);
             }
             default: {
                 commandSender.sendMessage("§cUnknown command.");
