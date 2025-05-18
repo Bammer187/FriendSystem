@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.UUID;
 
 public class FriendRemoveCommandExecutor implements CommandExecutor {
     @Override
@@ -58,9 +59,21 @@ public class FriendRemoveCommandExecutor implements CommandExecutor {
     }
 
     private void removeFriend(Player player1, Player player2) throws SQLException {
-        String query = """
-        DELETE FROM friends
-        WHERE player_uuid = ? AND friend_uuid = ?;
-        """;
+        try (PreparedStatement statement = FriendSystem.getDatabase().getConnection().prepareStatement("""
+                DELETE FROM friends WHERE player_uuid = ? AND friend_uuid = ?;""")) {
+
+            UUID playerUUID = player1.getUniqueId();
+            UUID friendUUID = player2.getUniqueId();
+
+            statement.setString(1, friendUUID.toString());
+            statement.setString(2, playerUUID.toString());
+            statement.executeUpdate();
+
+            statement.setString(1, playerUUID.toString());
+            statement.setString(2, friendUUID.toString());
+            statement.executeUpdate();
+
+            FriendSystem.getDatabase().disconnect();
+        }
     }
 }
