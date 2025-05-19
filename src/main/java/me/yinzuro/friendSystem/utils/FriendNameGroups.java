@@ -4,21 +4,20 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class FriendNameGroups {
-
-    private final List<String> onlineFriends;
-    private final List<String> offlineFriends;
+public record FriendNameGroups(List<String> onlineFriends, List<String> offlineFriends) {
 
     public FriendNameGroups(List<String> onlineFriends, List<String> offlineFriends) {
         this.onlineFriends = onlineFriends != null ? onlineFriends : new ArrayList<>();
         this.offlineFriends = offlineFriends != null ? offlineFriends : new ArrayList<>();
     }
 
-    public List<String> getOnlineFriends() {
+    @Override
+    public List<String> onlineFriends() {
         return Collections.unmodifiableList(onlineFriends);
     }
 
-    public List<String> getOfflineFriends() {
+    @Override
+    public List<String> offlineFriends() {
         return Collections.unmodifiableList(offlineFriends);
     }
 
