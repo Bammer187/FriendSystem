@@ -74,6 +74,24 @@ public class FriendListUtils {
     }
 
     public static List<String> getOnlineFriends(Player player) {
+        List<UUID> friends;
 
+        try {
+            friends = FriendListUtils.getAllFriends(player);
+        } catch (SQLException e) {
+            player.sendMessage("§cThere was an error while getting all your friends");
+            plugin.getLogger().severe("MySQL-ERROR while reading from friends: " + e.getMessage());
+            return Collections.emptyList();
+        }
+        List<String> onlineFriends = new ArrayList<>();
+
+        for (UUID friendUUID : friends) {
+            Player friend = Bukkit.getPlayer(friendUUID);
+            if (friend != null && friend.isOnline()) {
+                onlineFriends.add(friend.getName());
+            }
+        }
+
+        return onlineFriends;
     }
 }

@@ -2,7 +2,6 @@ package me.yinzuro.friendSystem.commands;
 
 import me.yinzuro.friendSystem.FriendSystem;
 import me.yinzuro.friendSystem.utils.FriendListUtils;
-import org.bukkit.Bukkit;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -12,9 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class FriendListCommandExecutor implements CommandExecutor {
 
@@ -39,43 +36,39 @@ public class FriendListCommandExecutor implements CommandExecutor {
             player.sendMessage("§cUsage /friend list <page>");
             return true;
         }
+
+        int page;
         try {
-            int page;
-            try {
-                page = Integer.parseInt(friendListPage);
-                if (page < 1) throw new NumberFormatException();
-            } catch (NumberFormatException e) {
-                player.sendMessage("§cInvalid page number.");
-                return true;
+            page = Integer.parseInt(friendListPage);
+            if (page < 1) throw new NumberFormatException();
+        } catch (NumberFormatException e) {
+            player.sendMessage("§cInvalid page number.");
+            return true;
+        }
+
+        List<String> allFriendNames = FriendListUtils.getSortedFriendNames(player);
+        List<String> onlineFriends = FriendListUtils.getOnlineFriends(player);
+
+        double MAX_PLAYERS_PER_PAGE = 5.0;
+        int totalPages = (int) Math.ceil((double) allFriendNames.size() / MAX_PLAYERS_PER_PAGE);
+        if (page > totalPages) {
+            player.sendMessage("§cPage does not exist. Max: " + totalPages);
+            return true;
+        }
+
+        player.sendMessage("§6Your Friends §8(Page " + page + "/" + totalPages + "):");
+
+        int start = (page - 1) * 5;
+        int end = Math.min(start + 5, allFriendNames.size());
+        String onlineStatus = "";
+
+        for (int i = start; i < end; i++) {
+            if(onlineFriends.contains(allFriendNames.get(i))) {
+                onlineStatus = "§aONLINE";
+            } else {
+                onlineStatus = "§cOFFLINE";
             }
-
-            List<String> allFriendNames = FriendListUtils.getSortedFriendNames(player);
-
-            double MAX_PLAYERS_PER_PAGE = 5.0;
-            int totalPages = (int) Math.ceil((double) allFriendNames.size() / MAX_PLAYERS_PER_PAGE);
-            if (page > totalPages) {
-                player.sendMessage("§cPage does not exist. Max: " + totalPages);
-                return true;
-            }
-
-            player.sendMessage("§6Your Friends §8(Page " + page + "/" + totalPages + "):");
-
-            int start = (page - 1) * 5;
-            int end = Math.min(start + 5, allFriendNames.size());
-            String onlineStatus = "";
-
-            for (int i = start; i < end; i++) {
-                if(onlineFriends.contains(allFriendNames.get(i))) {
-                    onlineStatus = "§aONLINE";
-                } else {
-                    onlineStatus = "§cOFFLINE";
-                }
-                player.sendMessage("§7" + allFriendNames.get(i) + " §3» " + onlineStatus);
-            }
-
-        } catch (SQLException e) {
-            player.sendMessage("§cThere was an error while displaying your friend list.");
-            plugin.getLogger().severe("MySQL-ERROR while reading from friends: " + e.getMessage());
+            player.sendMessage("§7" + allFriendNames.get(i) + " §3» " + onlineStatus);
         }
 
         return true;
