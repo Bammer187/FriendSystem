@@ -49,22 +49,7 @@ public class FriendListCommandExecutor implements CommandExecutor {
                 return true;
             }
 
-            List<UUID> friends = FriendListUtils.getAllFriends(player);
-            List<String> onlineFriends = new ArrayList<>();
-            List<String> offlineFriends = new ArrayList<>();
-
-            for (UUID friendUUID : friends) {
-                Player friend = Bukkit.getPlayer(friendUUID);
-                if (friend != null && friend.isOnline()) {
-                    onlineFriends.add(friend.getName());
-                } else {
-                    offlineFriends.add(Bukkit.getOfflinePlayer(friendUUID).getName());
-                }
-            }
-
-            List<String> allFriendNames = new ArrayList<>();
-            allFriendNames.addAll(onlineFriends);
-            allFriendNames.addAll(offlineFriends);
+            List<String> allFriendNames = FriendListUtils.getSortedFriendNames(player);
 
             double MAX_PLAYERS_PER_PAGE = 5.0;
             int totalPages = (int) Math.ceil((double) allFriendNames.size() / MAX_PLAYERS_PER_PAGE);
