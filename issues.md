@@ -17,3 +17,4 @@
 15. () ISSUE-015: make commands work even if one player isn't online
 16. (X) ISSUE-016: MessageUtils Class
 17. (X) ISSUE-017: Refractor code that is used by FriendListCommandExecutor and FriendListClickListener in its own Class
+18. () ISSUE-018: Class to separate online offline Players
