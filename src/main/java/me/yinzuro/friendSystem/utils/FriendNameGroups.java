@@ -12,4 +12,16 @@ public class FriendNameGroups {
         this.onlineFriends = onlineFriends != null ? onlineFriends : new ArrayList<>();
         this.offlineFriends = offlineFriends != null ? offlineFriends : new ArrayList<>();
     }
+
+    public List<String> getOnlineFriends() {
+
+    }
+
+    public List<String> getOfflineFriends() {
+
+    }
+
+    public List<String> getAllFriends() {
+
+    }
 }
