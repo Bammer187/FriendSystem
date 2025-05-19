@@ -64,30 +64,4 @@ public class FriendListClickListener implements Listener {
             event.setCancelled(true);
         }
     }
-
-    private List<UUID> getAllFriends(Player player) throws SQLException {
-        String query = """
-        SELECT friend_uuid FROM friends
-        WHERE player_uuid = ?;
-        """;
-
-        List<UUID> friendUUIDs = new ArrayList<>();
-
-        try (Connection connection = FriendSystem.getDatabase().getConnection();
-             PreparedStatement ps = connection.prepareStatement(query)) {
-
-            ps.setString(1, player.getUniqueId().toString());
-
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    String uuidStr = rs.getString("friend_uuid");
-                    if (uuidStr != null) {
-                        friendUUIDs.add(UUID.fromString(uuidStr));
-                    }
-                }
-            }
-        }
-
-        return friendUUIDs;
-    }
 }

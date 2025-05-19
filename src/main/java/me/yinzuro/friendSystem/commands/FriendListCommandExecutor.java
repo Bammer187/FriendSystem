@@ -1,8 +1,9 @@
 package me.yinzuro.friendSystem.commands;
 
 import me.yinzuro.friendSystem.FriendSystem;
+import me.yinzuro.friendSystem.utils.FriendListUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -10,9 +11,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +49,7 @@ public class FriendListCommandExecutor implements CommandExecutor {
                 return true;
             }
 
-            List<UUID> friends = getAllFriends(player);
+            List<UUID> friends = FriendListUtils.getAllFriends(player);
             List<String> onlineFriends = new ArrayList<>();
             List<String> offlineFriends = new ArrayList<>();
 
@@ -96,31 +94,5 @@ public class FriendListCommandExecutor implements CommandExecutor {
         }
 
         return true;
-    }
-
-    private List<UUID> getAllFriends(Player player) throws SQLException {
-        String query = """
-        SELECT friend_uuid FROM friends
-        WHERE player_uuid = ?;
-        """;
-
-        List<UUID> friendUUIDs = new ArrayList<>();
-
-        try (Connection connection = FriendSystem.getDatabase().getConnection();
-             PreparedStatement ps = connection.prepareStatement(query)) {
-
-            ps.setString(1, player.getUniqueId().toString());
-
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    String uuidStr = rs.getString("friend_uuid");
-                    if (uuidStr != null) {
-                        friendUUIDs.add(UUID.fromString(uuidStr));
-                    }
-                }
-            }
-        }
-
-        return friendUUIDs;
     }
 }
