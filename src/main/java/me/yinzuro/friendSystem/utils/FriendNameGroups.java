@@ -1,6 +1,7 @@
 package me.yinzuro.friendSystem.utils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class FriendNameGroups {
@@ -14,14 +15,16 @@ public class FriendNameGroups {
     }
 
     public List<String> getOnlineFriends() {
-
+        return Collections.unmodifiableList(onlineFriends);
     }
 
     public List<String> getOfflineFriends() {
-
+        return Collections.unmodifiableList(offlineFriends);
     }
 
     public List<String> getAllFriends() {
-
+        List<String> allFriends = new ArrayList<>(onlineFriends);
+        allFriends.addAll(offlineFriends);
+        return allFriends;
     }
 }
