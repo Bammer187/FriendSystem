@@ -50,6 +50,9 @@ public class FriendListClickListener implements Listener {
 
     @EventHandler
     public void onInventoryDrag(InventoryDragEvent event) {
-
+        Component title = Component.text("§bYour friends");
+        if (event.getView().title().equals(title)) {
+            event.setCancelled(true);
+        }
     }
 }
