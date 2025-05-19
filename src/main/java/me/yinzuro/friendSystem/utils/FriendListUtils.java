@@ -44,54 +44,28 @@ public class FriendListUtils {
         return friendUUIDs;
     }
 
-    public static List<String> getSortedFriendNames(Player player) {
+    public static FriendNameGroups getFriendNameGroups(Player player) {
         List<UUID> friends;
-
         try {
-            friends = FriendListUtils.getAllFriends(player);
+            friends = getAllFriends(player);
         } catch (SQLException e) {
-            player.sendMessage("§cThere was an error while getting all your friends");
+            player.sendMessage("§cThere was an error while getting all your friends.");
             plugin.getLogger().severe("MySQL-ERROR while reading from friends: " + e.getMessage());
-            return Collections.emptyList();
+            return new FriendNameGroups(Collections.emptyList(), Collections.emptyList());
         }
-        List<String> onlineFriends = new ArrayList<>();
-        List<String> offlineFriends = new ArrayList<>();
 
-        for (UUID friendUUID : friends) {
-            Player friend = Bukkit.getPlayer(friendUUID);
+        List<String> online = new ArrayList<>();
+        List<String> offline = new ArrayList<>();
+
+        for (UUID uuid : friends) {
+            Player friend = Bukkit.getPlayer(uuid);
             if (friend != null && friend.isOnline()) {
-                onlineFriends.add(friend.getName());
+                online.add(friend.getName());
             } else {
-                offlineFriends.add(Bukkit.getOfflinePlayer(friendUUID).getName());
+                offline.add(Bukkit.getOfflinePlayer(uuid).getName());
             }
         }
 
-        List<String> allFriendNames = new ArrayList<>();
-        allFriendNames.addAll(onlineFriends);
-        allFriendNames.addAll(offlineFriends);
-
-        return allFriendNames;
-    }
-
-    public static List<String> getOnlineFriends(Player player) {
-        List<UUID> friends;
-
-        try {
-            friends = FriendListUtils.getAllFriends(player);
-        } catch (SQLException e) {
-            player.sendMessage("§cThere was an error while getting all your friends");
-            plugin.getLogger().severe("MySQL-ERROR while reading from friends: " + e.getMessage());
-            return Collections.emptyList();
-        }
-        List<String> onlineFriends = new ArrayList<>();
-
-        for (UUID friendUUID : friends) {
-            Player friend = Bukkit.getPlayer(friendUUID);
-            if (friend != null && friend.isOnline()) {
-                onlineFriends.add(friend.getName());
-            }
-        }
-
-        return onlineFriends;
+        return new FriendNameGroups(online, offline);
     }
 }
