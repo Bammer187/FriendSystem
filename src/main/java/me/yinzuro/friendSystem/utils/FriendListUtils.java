@@ -38,4 +38,8 @@ public class FriendListUtils {
 
         return friendUUIDs;
     }
+
+    public static List<String> getSortedFriendNames(Player player) {
+
+    }
 }
