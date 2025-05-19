@@ -3,6 +3,7 @@ package me.yinzuro.friendSystem.commands;
 import me.yinzuro.friendSystem.FriendSystem;
 import me.yinzuro.friendSystem.utils.FriendListUtils;
 
+import me.yinzuro.friendSystem.utils.FriendNameGroups;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -46,8 +47,9 @@ public class FriendListCommandExecutor implements CommandExecutor {
             return true;
         }
 
-        List<String> allFriendNames = FriendListUtils.getSortedFriendNames(player);
-        List<String> onlineFriends = FriendListUtils.getOnlineFriends(player);
+        FriendNameGroups group = FriendListUtils.getFriendNameGroups(player);
+        List<String> allFriendNames = group.getAllFriends();
+        List<String> onlineFriends = group.getOnlineFriends();
 
         double MAX_PLAYERS_PER_PAGE = 5.0;
         int totalPages = (int) Math.ceil((double) allFriendNames.size() / MAX_PLAYERS_PER_PAGE);
