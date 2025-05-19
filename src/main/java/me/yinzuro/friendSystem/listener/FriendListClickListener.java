@@ -24,6 +24,16 @@ public class FriendListClickListener implements Listener {
             Component title = Component.text("§bYour friends");
             Inventory friendsInventory = Bukkit.createInventory(null, 54, title);
 
+            for (int i=0; i<9; i++) {
+                ItemStack glassPane = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
+                friendsInventory.setItem(i, glassPane);
+            }
+
+            for (int i=45; i<54; i++) {
+                ItemStack glassPane = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
+                friendsInventory.setItem(i, glassPane);
+            }
+
             player.openInventory(friendsInventory);
         }
     }
