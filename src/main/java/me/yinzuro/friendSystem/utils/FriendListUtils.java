@@ -72,4 +72,8 @@ public class FriendListUtils {
 
         return allFriendNames;
     }
+
+    public static List<String> getOnlineFriends(Player player) {
+
+    }
 }
