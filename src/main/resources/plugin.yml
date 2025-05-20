@@ -4,7 +4,11 @@ main: me.yinzuro.friendSystem.FriendSystem
 api-version: '1.21'
 commands:
   friend:
+    description: Manage your friends
+    aliases: [friends]
   message:
-    aliases: ["msg"]
+    description: Message a friend
+    aliases: [msg]
   respond:
-    aliases: ["r"]
+    description: Respond to a friend
+    aliases: [r]
