@@ -1,6 +1,7 @@
 package me.yinzuro.friendSystem.listener;
 
-import me.yinzuro.friendSystem.FriendSystem;
+import me.yinzuro.friendSystem.utils.FriendListUtils;
+import me.yinzuro.friendSystem.utils.FriendNameGroups;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -14,13 +15,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class FriendListClickListener implements Listener {
 
@@ -44,6 +39,12 @@ public class FriendListClickListener implements Listener {
                 ItemStack glassPane = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
                 friendsInventory.setItem(i, glassPane);
             }
+
+            FriendNameGroups group = FriendListUtils.getFriendNameGroups(player);
+            List<String> allFriendNames = group.getAllFriends();
+
+            double MAX_PLAYERS_PER_PAGE = 36.0;
+            int totalPages = (int) Math.ceil((double) allFriendNames.size() / MAX_PLAYERS_PER_PAGE);
 
             player.openInventory(friendsInventory);
         }
