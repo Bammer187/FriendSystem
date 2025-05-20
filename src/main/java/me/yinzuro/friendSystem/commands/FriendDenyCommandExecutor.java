@@ -50,16 +50,7 @@ public class FriendDenyCommandExecutor implements CommandExecutor {
 
         try {
             if (checkIfThereIsRequest(target, player)) {
-                try {
-                    denyRequest(target, player);
-                    player.sendMessage(PREFIX + "You denied the friend request from §e" + target.getName() + "§7.");
-                    if (targetOnline != null) {
-                        targetOnline.sendMessage(PREFIX + "§e" + player.getName() + " §7has denied your friend request.");
-                    }
-                } catch (SQLException e) {
-                    player.sendMessage(PREFIX + "§cThere was an error while denying the request.");
-                    plugin.getLogger().severe("MySQL-ERROR while trying to delete from open_friend_requests: " + e.getMessage());
-                }
+                denyFriendRequest(player, target);
             } else {
                 player.sendMessage(PREFIX + "You don't have an open request from this player.");
             }
@@ -102,6 +93,15 @@ public class FriendDenyCommandExecutor implements CommandExecutor {
             try (ResultSet rs = ps.executeQuery()) {
                 return rs.next();
             }
+        }
+    }
+
+    private void denyFriendRequest(Player player, OfflinePlayer target) throws SQLException {
+        denyRequest(target, player);
+        player.sendMessage(PREFIX + "You denied the friend request from §e" + target.getName() + "§7.");
+
+        if (target.isOnline() && target instanceof Player targetOnline) {
+            targetOnline.sendMessage(PREFIX + "§e" + player.getName() + " §7has denied your friend request.");
         }
     }
 }
