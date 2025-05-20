@@ -71,6 +71,18 @@ public class FriendListClickListener implements Listener {
 
                 } else {
                     ItemStack friendHeadOffline = new ItemStack(Material.SKELETON_SKULL);
+                    ItemMeta meta = friendHeadOffline.getItemMeta();
+
+                    Component friendName = Component.text(allFriendNames.get(i)).decoration(TextDecoration.ITALIC, false);;
+                    meta.displayName(friendName);
+
+                    List<Component> lore = List.of(
+                            Component.text("§7Status: ").append(Component.text("§cOFFLINE"))
+                    );
+                    meta.lore(lore);
+
+                    friendHeadOffline.setItemMeta(meta);
+                    friendsInventory.setItem(i + 9, friendHeadOffline);
                 }
             }
 
