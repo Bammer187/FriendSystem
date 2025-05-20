@@ -1,5 +1,6 @@
 package me.yinzuro.friendSystem.commands;
 
+import static me.yinzuro.friendSystem.utils.ChatPrefix.PREFIX;
 import me.yinzuro.friendSystem.FriendSystem;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -23,12 +24,12 @@ public class FriendRemoveCommandExecutor implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String @NotNull [] strings) {
         if (!(commandSender instanceof Player player)) {
-            commandSender.sendMessage("§cYou aren't a player.");
+            commandSender.sendMessage(PREFIX + "§cYou aren't a player.");
             return true;
         }
 
         if (strings.length != 1) {
-            player.sendMessage("§cUsage: /friend remove <Player>");
+            player.sendMessage(PREFIX + "Usage: /friend remove <Player>");
             return true;
         }
 
@@ -38,12 +39,12 @@ public class FriendRemoveCommandExecutor implements CommandExecutor {
         OfflinePlayer target = targetOnline != null ? targetOnline : Bukkit.getOfflinePlayer(targetName);
 
         if (target.getUniqueId().equals(player.getUniqueId())) {
-            player.sendMessage("§cYou can't add yourself.");
+            player.sendMessage(PREFIX + "You can't remove yourself.");
             return true;
         }
 
         if (target.getName() == null || (!target.hasPlayedBefore() && !target.isOnline())) {
-            player.sendMessage("§cThis player was never online before.");
+            player.sendMessage(PREFIX + "This player was never online before.");
             return true;
         }
 
@@ -51,10 +52,10 @@ public class FriendRemoveCommandExecutor implements CommandExecutor {
             if(canRemoveFriend(player, target)) {
                 removeFriend(player, target);
             } else {
-                player.sendMessage("§cYou aren't friends with this player.");
+                player.sendMessage(PREFIX + "You aren't friends with this player.");
             }
         } catch (SQLException e) {
-            player.sendMessage("§cThere was an error while deleting this friend.");
+            player.sendMessage(PREFIX + "§cThere was an error while deleting this friend.");
             plugin.getLogger().severe("MySQL-ERROR while selecting from friends: " + e.getMessage());
         }
 
@@ -101,10 +102,10 @@ public class FriendRemoveCommandExecutor implements CommandExecutor {
 
     private void removeFriend(Player player, OfflinePlayer target) throws SQLException {
         removeFriendSQL(player, target);
-        player.sendMessage("§aYou've ended the friendship with " + target.getName() + ".");
+        player.sendMessage(PREFIX + "§7You've ended the friendship with §e" + target.getName() + "§7.");
 
         if (target.isOnline() && target instanceof Player targetOnline) {
-            targetOnline.sendMessage("§c" + player.getName() + " has ended the friendship with you.");
+            targetOnline.sendMessage(PREFIX + "§e" + player.getName() + " §7has ended the friendship with you.");
         }
     }
 }
