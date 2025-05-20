@@ -7,13 +7,13 @@
 5. (X) ISSUE-005: respond command
 6. (X) ISSUE-006: list command to get all friends
 7. (X) ISSUE-007: Create a UI for list command
-8. () ISSUE-008: FriendCommandExecutor Class to handle subcommands
+8. (X) ISSUE-008: FriendCommandExecutor Class to handle subcommands
 9. (X) ISSUE-009: friend accept command
 10. (X) ISSUE-010: friend deny command
 11. (X) ISSUE-011: DatabaseManager Class
 12. (X) ISSUE-012: Create callable instance of FriendSystem Class
 13. (X) ISSUE-013: Save player UUID on first join
-14. () ISSUE-014: make subcommands tabable
+14. (X) ISSUE-014: make subcommands tabable
 15. () ISSUE-015: make commands work even if one player isn't online (add, accept, deny, remove)
 16. (X) ISSUE-016: MessageUtils Class
 17. (X) ISSUE-017: Refractor code that is used by FriendListCommandExecutor and FriendListClickListener in its own Class

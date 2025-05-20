@@ -1,5 +1,6 @@
 package me.yinzuro.friendSystem;
 
+import me.yinzuro.friendSystem.commands.FriendCommandTabCompleter;
 import me.yinzuro.friendSystem.commands.MessageCommandExecutor;
 import me.yinzuro.friendSystem.commands.RespondCommandExecutor;
 import me.yinzuro.friendSystem.database.DatabaseManager;
@@ -31,6 +32,7 @@ public final class FriendSystem extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
         getServer().getPluginManager().registerEvents(new FriendListClickListener(), this);
         getCommand("friend").setExecutor(new FriendCommandExecutor());
+        getCommand("friend").setTabCompleter(new FriendCommandTabCompleter());
         getCommand("message").setExecutor(new MessageCommandExecutor());
         getCommand("respond").setExecutor(new RespondCommandExecutor());
     }
