@@ -44,18 +44,6 @@ public class FriendListClickListener implements Listener {
                 friendsInventory.setItem(i, glassPane);
             }
 
-            ItemStack previousPage = new ItemStack(Material.ARROW);
-            ItemMeta prevMeta = previousPage.getItemMeta();
-            prevMeta.displayName(Component.text("§7← Previous Page").decoration(TextDecoration.ITALIC, false));
-            previousPage.setItemMeta(prevMeta);
-            friendsInventory.setItem(45, previousPage);
-
-            ItemStack nextPage = new ItemStack(Material.ARROW);
-            ItemMeta nextMeta = nextPage.getItemMeta();
-            nextMeta.displayName(Component.text("§7Next Page →").decoration(TextDecoration.ITALIC, false));
-            nextPage.setItemMeta(nextMeta);
-            friendsInventory.setItem(53, nextPage);
-
             FriendNameGroups group = FriendListUtils.getFriendNameGroups(player);
             List<String> allFriendNames = group.getAllFriends();
             List<String> onlineFriends = group.onlineFriends();
@@ -78,6 +66,18 @@ public class FriendListClickListener implements Listener {
                     friendsInventory.setItem(i + 9, friendHeadOffline);
                 }
             }
+
+            ItemStack previousPage = new ItemStack(Material.ARROW);
+            ItemMeta prevMeta = previousPage.getItemMeta();
+            prevMeta.displayName(Component.text("§7← Previous Page").decoration(TextDecoration.ITALIC, false));
+            previousPage.setItemMeta(prevMeta);
+            friendsInventory.setItem(45, previousPage);
+
+            ItemStack nextPage = new ItemStack(Material.ARROW);
+            ItemMeta nextMeta = nextPage.getItemMeta();
+            nextMeta.displayName(Component.text("§7Next Page →").decoration(TextDecoration.ITALIC, false));
+            nextPage.setItemMeta(nextMeta);
+            friendsInventory.setItem(53, nextPage);
 
             player.openInventory(friendsInventory);
         }
@@ -122,8 +122,14 @@ public class FriendListClickListener implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         Component title = Component.text("§bYour friends");
-        if (event.getView().title().equals(title)) {
-            event.setCancelled(true);
+        if (!event.getView().title().equals(title)) return;
+
+        event.setCancelled(true);
+        int slot = event.getRawSlot();
+        if (slot == 45) {
+            
+        } else if (slot == 53) {
+            
         }
     }
 
