@@ -1,5 +1,6 @@
 package me.yinzuro.friendSystem.commands;
 
+import static me.yinzuro.friendSystem.utils.ChatPrefix.PREFIX;
 import me.yinzuro.friendSystem.FriendSystem;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -23,7 +24,7 @@ public class FriendAcceptCommandExecutor implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String @NotNull [] strings) {
         if (!(commandSender instanceof Player player)) {
-            commandSender.sendMessage("§cYou aren't a player.");
+            commandSender.sendMessage(PREFIX + "§cYou aren't a player.");
             return true;
         }
 
@@ -33,23 +34,23 @@ public class FriendAcceptCommandExecutor implements CommandExecutor {
         OfflinePlayer target = targetOnline != null ? targetOnline : Bukkit.getOfflinePlayer(targetName);
 
         if (target.getUniqueId().equals(player.getUniqueId())) {
-            player.sendMessage("§cYou can't add yourself.");
+            player.sendMessage(PREFIX + "You can't accept yourself.");
             return true;
         }
 
         if (target.getName() == null || (!target.hasPlayedBefore() && !target.isOnline())) {
-            player.sendMessage("§cThis player was never online before.");
+            player.sendMessage(PREFIX + "This player was never online before.");
             return true;
         }
 
         try {
             if (!checkIfThereIsRequest(target, player)) {
-                player.sendMessage("§cYou don't have an open request from this player.");
+                player.sendMessage(PREFIX + "You don't have an open request from this player.");
                 return true;
             }
             acceptFriendRequest(player, target);
         } catch (SQLException e) {
-            player.sendMessage("§cThere was an error while accepting the request.");
+            player.sendMessage(PREFIX + "§cThere was an error while accepting the request.");
             plugin.getLogger().severe("MySQL-ERROR while handling friend request: " + e.getMessage());
         }
 
@@ -116,10 +117,10 @@ public class FriendAcceptCommandExecutor implements CommandExecutor {
 
     private void acceptFriendRequest(Player player, OfflinePlayer target) throws SQLException {
         addFriend(target, player);
-        player.sendMessage("§aYou are now friends with " + target.getName() + ".");
+        player.sendMessage(PREFIX + "You are now friends with §e" + target.getName() + "§7.");
 
         if (target.isOnline() && target instanceof Player targetOnline) {
-            targetOnline.sendMessage("§aYou are now friends with " + player.getName() + ".");
+            targetOnline.sendMessage(PREFIX + "You are now friends with §e" + player.getName() + "§7.");
         }
     }
 }
