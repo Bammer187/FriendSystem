@@ -3,6 +3,7 @@ package me.yinzuro.friendSystem.listener;
 import me.yinzuro.friendSystem.utils.FriendListUtils;
 import me.yinzuro.friendSystem.utils.FriendNameGroups;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -14,6 +15,7 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
 
@@ -50,13 +52,25 @@ public class FriendListClickListener implements Listener {
 
             int start = (page - 1) * 36;
             int end = Math.min(start + 36, allFriendNames.size());
-            String onlineStatus = "";
 
             for (int i = start; i < end; i++) {
                 if(onlineFriends.contains(allFriendNames.get(i))) {
-                    onlineStatus = "§aONLINE";
+                    ItemStack friendHead = new ItemStack(Material.PLAYER_HEAD);
+                    ItemMeta meta = friendHead.getItemMeta();
+
+                    Component friendName = Component.text(allFriendNames.get(i)).decoration(TextDecoration.ITALIC, false);;
+                    meta.displayName(friendName);
+
+                    List<Component> lore = List.of(
+                            Component.text("§7Status: ").append(Component.text("§aONLINE"))
+                    );
+                    meta.lore(lore);
+
+                    friendHead.setItemMeta(meta);
+                    friendsInventory.setItem(i + 9, friendHead);
+
                 } else {
-                    onlineStatus = "§cOFFLINE";
+                    ItemStack friendHeadOffline = new ItemStack(Material.SKELETON_SKULL);
                 }
             }
 
