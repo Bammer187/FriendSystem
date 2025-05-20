@@ -14,7 +14,7 @@
 12. (X) ISSUE-012: Create callable instance of FriendSystem Class
 13. (X) ISSUE-013: Save player UUID on first join
 14. () ISSUE-014: make subcommands tabable
-15. () ISSUE-015: make commands work even if one player isn't online
+15. () ISSUE-015: make commands work even if one player isn't online (add, accept, deny, remove)
 16. (X) ISSUE-016: MessageUtils Class
 17. (X) ISSUE-017: Refractor code that is used by FriendListCommandExecutor and FriendListClickListener in its own Class
 18. (X) ISSUE-018: Class to separate online offline Players
