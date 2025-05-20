@@ -48,11 +48,10 @@ public class FriendRemoveCommandExecutor implements CommandExecutor {
         }
 
         try {
-            if(canRemoveFriend(player, friend)) {
+            if(canRemoveFriend(player, target)) {
                 try {
-                    removeFriend(player, friend);
-                    player.sendMessage("§aYou've ended the friendship with " + friend.getName() + ".");
-                    friend.sendMessage("§c" + player.getName() + " has ended the friendship with you.");
+                    removeFriend(player, target);
+                    player.sendMessage("§aYou've ended the friendship with " + target.getName() + ".");
                 } catch (SQLException e) {
                     player.sendMessage("§cThere was an error while deleting this friend.");
                     plugin.getLogger().severe("MySQL-ERROR while deleting from friends: " + e.getMessage());
@@ -65,10 +64,14 @@ public class FriendRemoveCommandExecutor implements CommandExecutor {
             plugin.getLogger().severe("MySQL-ERROR while selecting from friends: " + e.getMessage());
         }
 
-        return false;
+        if (targetOnline != null) {
+            targetOnline.sendMessage("§c" + player.getName() + " has ended the friendship with you.");
+        }
+
+        return true;
     }
 
-    private boolean canRemoveFriend(Player player1, Player player2) throws SQLException {
+    private boolean canRemoveFriend(Player player1, OfflinePlayer player2) throws SQLException {
         String query = """
         SELECT 1 FROM friends
         WHERE player_uuid = ? AND friend_uuid = ?
@@ -87,7 +90,7 @@ public class FriendRemoveCommandExecutor implements CommandExecutor {
         }
     }
 
-    private void removeFriend(Player player1, Player player2) throws SQLException {
+    private void removeFriend(Player player1, OfflinePlayer player2) throws SQLException {
         try (PreparedStatement statement = FriendSystem.getDatabase().getConnection().prepareStatement("""
                 DELETE FROM friends WHERE player_uuid = ? AND friend_uuid = ?;""")) {
 
