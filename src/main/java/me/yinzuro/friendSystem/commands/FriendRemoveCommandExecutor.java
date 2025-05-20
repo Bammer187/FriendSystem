@@ -52,6 +52,9 @@ public class FriendRemoveCommandExecutor implements CommandExecutor {
                 try {
                     removeFriend(player, target);
                     player.sendMessage("§aYou've ended the friendship with " + target.getName() + ".");
+                    if (targetOnline != null) {
+                        targetOnline.sendMessage("§c" + player.getName() + " has ended the friendship with you.");
+                    }
                 } catch (SQLException e) {
                     player.sendMessage("§cThere was an error while deleting this friend.");
                     plugin.getLogger().severe("MySQL-ERROR while deleting from friends: " + e.getMessage());
@@ -62,10 +65,6 @@ public class FriendRemoveCommandExecutor implements CommandExecutor {
         } catch (SQLException e) {
             player.sendMessage("§cThere was an error while deleting this friend.");
             plugin.getLogger().severe("MySQL-ERROR while selecting from friends: " + e.getMessage());
-        }
-
-        if (targetOnline != null) {
-            targetOnline.sendMessage("§c" + player.getName() + " has ended the friendship with you.");
         }
 
         return true;
