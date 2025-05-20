@@ -43,11 +43,10 @@ public class FriendAcceptCommandExecutor implements CommandExecutor {
         }
 
         try {
-           if (checkIfThereIsRequest(friend, player)) {
+           if (checkIfThereIsRequest(target, player)) {
                 try {
-                    addFriend(friend, player);
-                    player.sendMessage("§aYou are now friends with " + friend.getName() + ".");
-                    friend.sendMessage("§aYou are now friends with " + player.getName() + ".");
+                    addFriend(target, player);
+                    player.sendMessage("§aYou are now friends with " + target.getName() + ".");
                 } catch (SQLException e) {
                     player.sendMessage("§c There was an error while trying to accept the request.");
                     plugin.getLogger().severe("§cMySQL-ERROR while accepting a friend request: " + e.getMessage());
@@ -63,7 +62,7 @@ public class FriendAcceptCommandExecutor implements CommandExecutor {
         return false;
     }
 
-    private boolean checkIfThereIsRequest(Player fromPlayer, Player toPlayer) throws SQLException {
+    private boolean checkIfThereIsRequest(OfflinePlayer fromPlayer, Player toPlayer) throws SQLException {
         String query = """
         SELECT 1 FROM open_friend_requests
         WHERE player_uuid = ? AND from_player_uuid = ?
@@ -82,7 +81,7 @@ public class FriendAcceptCommandExecutor implements CommandExecutor {
         }
     }
 
-    private void addFriend(Player fromPlayer, Player toPlayer) throws SQLException {
+    private void addFriend(OfflinePlayer fromPlayer, Player toPlayer) throws SQLException {
 
         try (PreparedStatement statement = FriendSystem.getDatabase().getConnection().prepareStatement("""
                 DELETE FROM open_friend_requests WHERE player_uuid = ? AND from_player_uuid = ?;""")) {
@@ -96,7 +95,7 @@ public class FriendAcceptCommandExecutor implements CommandExecutor {
 
             FriendSystem.getDatabase().disconnect();
         } catch (SQLException e) {
-            fromPlayer.sendMessage("§cThere was an error while deleting from database");
+            toPlayer.sendMessage("§cThere was an error while deleting from database");
             plugin.getLogger().severe("MySQL-ERROR while deleting from open_friend_requests: " + e.getMessage());
         }
 
@@ -116,7 +115,7 @@ public class FriendAcceptCommandExecutor implements CommandExecutor {
 
             FriendSystem.getDatabase().disconnect();
         } catch (SQLException e) {
-            fromPlayer.sendMessage("§cThere was an error while saving to database");
+            toPlayer.sendMessage("§cThere was an error while saving to database");
             plugin.getLogger().severe("MySQL-ERROR while inserting into friends: " + e.getMessage());
         }
     }
