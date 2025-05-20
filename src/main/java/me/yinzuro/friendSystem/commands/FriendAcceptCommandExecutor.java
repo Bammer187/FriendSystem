@@ -59,6 +59,10 @@ public class FriendAcceptCommandExecutor implements CommandExecutor {
             plugin.getLogger().severe("§cMySQL-ERROR while getting friend request: " + e.getMessage());
         }
 
+        if(targetOnline != null) {
+            targetOnline.sendMessage("§cYou are now friends with " + targetName + ".");
+        }
+
         return false;
     }
 
