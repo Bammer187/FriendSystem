@@ -19,4 +19,4 @@
 17. (X) ISSUE-017: Refractor code that is used by FriendListCommandExecutor and FriendListClickListener in its own Class
 18. (X) ISSUE-018: Class to separate online offline Players
 19. (X) ISSUE-019: aliases and descriptions for commands
-20. () ISSUE-020: Update text sended to the player
+20. () ISSUE-020: Update text sent to the player
