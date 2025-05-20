@@ -55,7 +55,7 @@ public class FriendListClickListener implements Listener {
 
             double MAX_PLAYERS_PER_PAGE = 36.0;
             int totalPages = (int) Math.ceil((double) allFriendNames.size() / MAX_PLAYERS_PER_PAGE);
-            int page = 1;
+            int page = playerPages.getOrDefault(player.getUniqueId(), 1);
 
             int start = (page - 1) * 36;
             int end = Math.min(start + 36, allFriendNames.size());
@@ -130,11 +130,17 @@ public class FriendListClickListener implements Listener {
         if (!event.getView().title().equals(title)) return;
 
         event.setCancelled(true);
+
+        Player player = (Player) event.getWhoClicked();
         int slot = event.getRawSlot();
         if (slot == 45) {
-            
+            int newPage = Math.max(1, playerPages.get(player.getUniqueId()) - 1);
+            playerPages.put(player.getUniqueId(), newPage);
+            openFriendInventory(player, newPage);
         } else if (slot == 53) {
-            
+            int newPage = Math.max(1, playerPages.get(player.getUniqueId()) + 1);
+            playerPages.put(player.getUniqueId(), newPage);
+            openFriendInventory(player, newPage);
         }
     }
 
