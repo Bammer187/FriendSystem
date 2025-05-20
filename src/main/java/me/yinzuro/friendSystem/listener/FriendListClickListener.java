@@ -19,9 +19,14 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class FriendListClickListener implements Listener {
+
+    private final Map<UUID, Integer> playerPages = new HashMap<>();
 
     @EventHandler
     public void onItemClick(PlayerInteractEvent event) {
