@@ -58,22 +58,8 @@ public class FriendListClickListener implements Listener {
             for (int i = start; i < end; i++) {
                 String friendName = allFriendNames.get(i);
                 if(onlineFriends.contains(friendName)) {
-                    ItemStack friendHead = new ItemStack(Material.PLAYER_HEAD);
-                    SkullMeta meta = (SkullMeta) friendHead.getItemMeta();
-
-                    Player friend = Bukkit.getPlayer(friendName);
-                    meta.setOwningPlayer(friend);
-
-                    Component friendNameComponent = Component.text(friendName).decoration(TextDecoration.ITALIC, false);;
-                    meta.displayName(friendNameComponent);
-
-                    List<Component> lore = List.of(
-                            Component.text("§7Status: ").append(Component.text("§aONLINE"))
-                    );
-                    meta.lore(lore);
-
-                    friendHead.setItemMeta(meta);
-                    friendsInventory.setItem(i + 9, friendHead);
+                    ItemStack friendHeadOnline = getFriendHeadOnline(allFriendNames, i);
+                    friendsInventory.setItem(i + 9, friendHeadOnline);
 
                 } else {
                     ItemStack friendHeadOffline = getFriendHeadOffline(allFriendNames, i);
@@ -83,6 +69,25 @@ public class FriendListClickListener implements Listener {
 
             player.openInventory(friendsInventory);
         }
+    }
+
+    private static @NotNull ItemStack getFriendHeadOnline(List<String> allFriendNames, int i) {
+        ItemStack friendHead = new ItemStack(Material.PLAYER_HEAD);
+        SkullMeta meta = (SkullMeta) friendHead.getItemMeta();
+
+        Player friend = Bukkit.getPlayer(allFriendNames.get(i));
+        meta.setOwningPlayer(friend);
+
+        Component friendNameComponent = Component.text(allFriendNames.get(i)).decoration(TextDecoration.ITALIC, false);;
+        meta.displayName(friendNameComponent);
+
+        List<Component> lore = List.of(
+                Component.text("§7Status: ").append(Component.text("§aONLINE"))
+        );
+        meta.lore(lore);
+
+        friendHead.setItemMeta(meta);
+        return friendHead;
     }
 
     private static @NotNull ItemStack getFriendHeadOffline(List<String> allFriendNames, int i) {
