@@ -60,7 +60,7 @@ public class FriendAcceptCommandExecutor implements CommandExecutor {
         }
 
         if(targetOnline != null) {
-            targetOnline.sendMessage("§cYou are now friends with " + targetName + ".");
+            targetOnline.sendMessage("§cYou are now friends with " + player.getName() + ".");
         }
 
         return false;
