@@ -6,7 +6,7 @@
 4. (X) ISSUE-004: message command
 5. (X) ISSUE-005: respond command
 6. (X) ISSUE-006: list command to get all friends
-7. () ISSUE-007: Create a UI for list command
+7. (X) ISSUE-007: Create a UI for list command
 8. () ISSUE-008: FriendCommandExecutor Class to handle subcommands
 9. (X) ISSUE-009: friend accept command
 10. (X) ISSUE-010: friend deny command

@@ -36,55 +36,9 @@ public class FriendListClickListener implements Listener {
         if (item == null || item.getType() != Material.PLAYER_HEAD) return;
 
         if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            Component title = Component.text("§bYour friends");
-            Inventory friendsInventory = Bukkit.createInventory(null, 54, title);
-
-            for (int i=0; i<9; i++) {
-                ItemStack glassPane = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
-                friendsInventory.setItem(i, glassPane);
-            }
-
-            for (int i=46; i<53; i++) {
-                ItemStack glassPane = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
-                friendsInventory.setItem(i, glassPane);
-            }
-
-            FriendNameGroups group = FriendListUtils.getFriendNameGroups(player);
-            List<String> allFriendNames = group.getAllFriends();
-            List<String> onlineFriends = group.onlineFriends();
-
-            double MAX_PLAYERS_PER_PAGE = 36.0;
-            int totalPages = (int) Math.ceil((double) allFriendNames.size() / MAX_PLAYERS_PER_PAGE);
             int page = playerPages.getOrDefault(player.getUniqueId(), 1);
-
-            int start = (page - 1) * 36;
-            int end = Math.min(start + 36, allFriendNames.size());
-
-            for (int i = start; i < end; i++) {
-                String friendName = allFriendNames.get(i);
-                if(onlineFriends.contains(friendName)) {
-                    ItemStack friendHeadOnline = getFriendHeadOnline(allFriendNames, i);
-                    friendsInventory.setItem(i + 9, friendHeadOnline);
-
-                } else {
-                    ItemStack friendHeadOffline = getFriendHeadOffline(allFriendNames, i);
-                    friendsInventory.setItem(i + 9, friendHeadOffline);
-                }
-            }
-
-            ItemStack previousPage = new ItemStack(Material.ARROW);
-            ItemMeta prevMeta = previousPage.getItemMeta();
-            prevMeta.displayName(Component.text("§7← Previous Page").decoration(TextDecoration.ITALIC, false));
-            previousPage.setItemMeta(prevMeta);
-            friendsInventory.setItem(45, previousPage);
-
-            ItemStack nextPage = new ItemStack(Material.ARROW);
-            ItemMeta nextMeta = nextPage.getItemMeta();
-            nextMeta.displayName(Component.text("§7Next Page →").decoration(TextDecoration.ITALIC, false));
-            nextPage.setItemMeta(nextMeta);
-            friendsInventory.setItem(53, nextPage);
-
-            player.openInventory(friendsInventory);
+            playerPages.put(player.getUniqueId(), 1);
+            openFriendInventory(player, page);
         }
     }
 
@@ -160,6 +114,50 @@ public class FriendListClickListener implements Listener {
     }
 
     public void openFriendInventory(Player player, int page) {
+        Component title = Component.text("§bYour friends");
+        Inventory friendsInventory = Bukkit.createInventory(null, 54, title);
 
+        for (int i=0; i<9; i++) {
+            ItemStack glassPane = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
+            friendsInventory.setItem(i, glassPane);
+        }
+
+        for (int i=46; i<53; i++) {
+            ItemStack glassPane = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
+            friendsInventory.setItem(i, glassPane);
+        }
+
+        FriendNameGroups group = FriendListUtils.getFriendNameGroups(player);
+        List<String> allFriendNames = group.getAllFriends();
+        List<String> onlineFriends = group.onlineFriends();
+
+        int start = (page - 1) * 36;
+        int end = Math.min(start + 36, allFriendNames.size());
+
+        for (int i = start; i < end; i++) {
+            String friendName = allFriendNames.get(i);
+            if(onlineFriends.contains(friendName)) {
+                ItemStack friendHeadOnline = getFriendHeadOnline(allFriendNames, i);
+                friendsInventory.setItem(i + 9, friendHeadOnline);
+
+            } else {
+                ItemStack friendHeadOffline = getFriendHeadOffline(allFriendNames, i);
+                friendsInventory.setItem(i + 9, friendHeadOffline);
+            }
+        }
+
+        ItemStack previousPage = new ItemStack(Material.ARROW);
+        ItemMeta prevMeta = previousPage.getItemMeta();
+        prevMeta.displayName(Component.text("§7← Previous Page").decoration(TextDecoration.ITALIC, false));
+        previousPage.setItemMeta(prevMeta);
+        friendsInventory.setItem(45, previousPage);
+
+        ItemStack nextPage = new ItemStack(Material.ARROW);
+        ItemMeta nextMeta = nextPage.getItemMeta();
+        nextMeta.displayName(Component.text("§7Next Page →").decoration(TextDecoration.ITALIC, false));
+        nextPage.setItemMeta(nextMeta);
+        friendsInventory.setItem(53, nextPage);
+
+        player.openInventory(friendsInventory);
     }
 }
