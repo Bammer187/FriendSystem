@@ -44,7 +44,7 @@ public class FriendListClickListener implements Listener {
                 friendsInventory.setItem(i, glassPane);
             }
 
-            for (int i=45; i<54; i++) {
+            for (int i=46; i<53; i++) {
                 ItemStack glassPane = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
                 friendsInventory.setItem(i, glassPane);
             }
@@ -133,12 +133,19 @@ public class FriendListClickListener implements Listener {
 
         Player player = (Player) event.getWhoClicked();
         int slot = event.getRawSlot();
+
         if (slot == 45) {
             int newPage = Math.max(1, playerPages.get(player.getUniqueId()) - 1);
             playerPages.put(player.getUniqueId(), newPage);
             openFriendInventory(player, newPage);
-        } else if (slot == 53) {
-            int newPage = Math.max(1, playerPages.get(player.getUniqueId()) + 1);
+        }
+        else if (slot == 53) {
+            double MAX_PLAYERS_PER_PAGE = 36.0;
+            FriendNameGroups group = FriendListUtils.getFriendNameGroups(player);
+            List<String> allFriendNames = group.getAllFriends();
+
+            int maxPages = (int) Math.ceil((double) allFriendNames.size() / MAX_PLAYERS_PER_PAGE);
+            int newPage = Math.min(maxPages, playerPages.get(player.getUniqueId()) + 1);
             playerPages.put(player.getUniqueId(), newPage);
             openFriendInventory(player, newPage);
         }
