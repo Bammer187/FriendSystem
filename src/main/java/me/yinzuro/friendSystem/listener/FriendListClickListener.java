@@ -140,4 +140,8 @@ public class FriendListClickListener implements Listener {
             event.setCancelled(true);
         }
     }
+
+    public void openFriendInventory(Player player, int page) {
+
+    }
 }
