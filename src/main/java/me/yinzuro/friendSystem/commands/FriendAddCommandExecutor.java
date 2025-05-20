@@ -1,5 +1,6 @@
 package me.yinzuro.friendSystem.commands;
 
+import static me.yinzuro.friendSystem.utils.ChatPrefix.PREFIX;
 import me.yinzuro.friendSystem.FriendSystem;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -29,12 +30,12 @@ public class FriendAddCommandExecutor implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String @NotNull [] strings) {
 
         if (!(commandSender instanceof Player player)) {
-            commandSender.sendMessage("§cYou aren't a player");
+            commandSender.sendMessage(PREFIX + "§cYou aren't a player");
             return true;
         }
 
         if (strings.length != 1) {
-            player.sendMessage("§cUsage: /friend add <Player>");
+            player.sendMessage(PREFIX + "Usage: /friend add <Player>");
             return true;
         }
 
@@ -44,25 +45,25 @@ public class FriendAddCommandExecutor implements CommandExecutor {
         OfflinePlayer target = targetOnline != null ? targetOnline : Bukkit.getOfflinePlayer(targetName);
 
         if (target.getUniqueId().equals(player.getUniqueId())) {
-            player.sendMessage("§cYou can't add yourself.");
+            player.sendMessage(PREFIX + "You can't add yourself.");
             return true;
         }
 
         if (target.getName() == null || (!target.hasPlayedBefore() && !target.isOnline())) {
-            player.sendMessage("§cThis player was never online before.");
+            player.sendMessage(PREFIX + "This player was never online before.");
             return true;
         }
 
         try {
             if (canNotSendRequest(player, target)) {
-                player.sendMessage("§cYou already sent a friend request to this player or are already friends with them.");
+                player.sendMessage(PREFIX + "You already sent a friend request to this player or are already friends with them.");
                 return true;
             } else if (canNotSendRequest(target, player)) {
-                player.sendMessage("§cYou already have a friend request from this player.");
+                player.sendMessage(PREFIX + "You already have a friend request from this player.");
                 return true;
             }
         } catch (SQLException e) {
-            player.sendMessage("§cDatabase error while checking existing friend requests.");
+            player.sendMessage(PREFIX + "§cDatabase error while checking existing friend requests.");
             plugin.getLogger().severe("MySQL-ERROR while checking for existing friend request: " + e.getMessage());
             return true;
         }
@@ -74,7 +75,7 @@ public class FriendAddCommandExecutor implements CommandExecutor {
             return true;
         }
 
-        player.sendMessage("§aSend friend request to " + target.getName());
+        player.sendMessage(PREFIX + "Send friend request to §e" + target.getName() + "§7.");
 
         if (targetOnline != null) {
             sendMessageToFriend(player, targetOnline);
@@ -96,7 +97,7 @@ public class FriendAddCommandExecutor implements CommandExecutor {
 
             FriendSystem.getDatabase().disconnect();
         } catch (SQLException e) {
-            fromPlayer.sendMessage("§cThere was an error while saving to database");
+            fromPlayer.sendMessage(PREFIX + "§cThere was an error while saving to database");
             plugin.getLogger().severe("MySQL-ERROR while inserting into open_friend_requests" + e.getMessage());
         }
     }
@@ -149,15 +150,15 @@ public class FriendAddCommandExecutor implements CommandExecutor {
     }
 
     private void sendMessageToFriend(Player fromPlayer, Player toPlayer) {
-        Component message = text("§aYou've gotten a friend request from " + fromPlayer.getName() + " ")
+        Component message = text(PREFIX + "§e" + fromPlayer.getName() + " §7wants to be your friend. ")
                 .append(
-                        text("§e[Click here to accept]")
+                        text("§a[ACCEPT]")
                                 .clickEvent(ClickEvent.runCommand("/friend accept " + fromPlayer.getName()))
                                 .hoverEvent(HoverEvent.showText(text("Click to accept the friend request")))
                 ).append(
                         text(" ")
                                 .append(
-                                        text("§c[Click here to deny]")
+                                        text("§c[DENY]")
                                                 .clickEvent(ClickEvent.runCommand("/friend deny " + fromPlayer.getName()))
                                                 .hoverEvent(HoverEvent.showText(text("Click to deny the friend request")))
                                 ));
