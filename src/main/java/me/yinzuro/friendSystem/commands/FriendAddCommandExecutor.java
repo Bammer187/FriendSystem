@@ -54,10 +54,10 @@ public class FriendAddCommandExecutor implements CommandExecutor {
         }
 
         try {
-            if (!canSendRequest(player, friend)) {
+            if (!canSendRequest(player, target)) {
                 player.sendMessage("§cYou already sent a friend request to this player or are already friends with them.");
                 return false;
-            } else if (!canSendRequest(friend, player)) {
+            } else if (!canSendRequest(target, player)) {
                 player.sendMessage("§cYou already have a friend request from this player.");
                 return false;
             }
@@ -69,32 +69,21 @@ public class FriendAddCommandExecutor implements CommandExecutor {
 
 
         try {
-            insertRequestIntoDatabase(player, friend);
+            insertRequestIntoDatabase(player, target);
         } catch (SQLException e) {
             return true;
         }
 
-        player.sendMessage("§aSend friend request to " + friend.getName());
+        player.sendMessage("§aSend friend request to " + target.getName());
 
-        Component message = text("§aYou've gotten a friend request from " + player.getName() + " ")
-                .append(
-                        text("§e[Click here to accept]")
-                                .clickEvent(ClickEvent.runCommand("/friend accept " + player.getName()))
-                                .hoverEvent(HoverEvent.showText(text("Click to accept the friend request")))
-                ).append(
-                        text(" ")
-                .append(
-                        text("§c[Click here to deny]")
-                                .clickEvent(ClickEvent.runCommand("/friend deny " + player.getName()))
-                                .hoverEvent(HoverEvent.showText(text("Click to deny the friend request")))
-                ));
-
-        friend.sendMessage(message);
+        if (targetOnline != null) {
+            sendMessageToFriend(player, targetOnline);
+        }
 
         return false;
     }
 
-    private void insertRequestIntoDatabase (Player fromPlayer, Player toPlayer) throws SQLException {
+    private void insertRequestIntoDatabase (Player fromPlayer, OfflinePlayer toPlayer) throws SQLException {
         try (PreparedStatement statement = FriendSystem.getDatabase().getConnection().prepareStatement("""
                 INSERT INTO open_friend_requests (player_uuid, from_player_uuid) VALUES (?, ?);""")) {
 
@@ -112,7 +101,7 @@ public class FriendAddCommandExecutor implements CommandExecutor {
         }
     }
 
-    private boolean canSendRequest(Player fromPlayer, Player toPlayer) throws SQLException {
+    private boolean canSendRequest(OfflinePlayer fromPlayer, OfflinePlayer toPlayer) throws SQLException {
         UUID fromUUID = fromPlayer.getUniqueId();
         UUID toUUID = toPlayer.getUniqueId();
 
@@ -157,5 +146,22 @@ public class FriendAddCommandExecutor implements CommandExecutor {
 
             return true;
         }
+    }
+
+    private void sendMessageToFriend(Player fromPlayer, Player toPlayer) {
+        Component message = text("§aYou've gotten a friend request from " + fromPlayer.getName() + " ")
+                .append(
+                        text("§e[Click here to accept]")
+                                .clickEvent(ClickEvent.runCommand("/friend accept " + fromPlayer.getName()))
+                                .hoverEvent(HoverEvent.showText(text("Click to accept the friend request")))
+                ).append(
+                        text(" ")
+                                .append(
+                                        text("§c[Click here to deny]")
+                                                .clickEvent(ClickEvent.runCommand("/friend deny " + fromPlayer.getName()))
+                                                .hoverEvent(HoverEvent.showText(text("Click to deny the friend request")))
+                                ));
+
+        toPlayer.sendMessage(message);
     }
 }
