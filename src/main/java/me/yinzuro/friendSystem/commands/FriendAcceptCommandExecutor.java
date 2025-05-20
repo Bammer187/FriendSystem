@@ -43,23 +43,14 @@ public class FriendAcceptCommandExecutor implements CommandExecutor {
         }
 
         try {
-           if (checkIfThereIsRequest(target, player)) {
-                try {
-                    addFriend(target, player);
-                    player.sendMessage("§aYou are now friends with " + target.getName() + ".");
-                    if(targetOnline != null) {
-                        targetOnline.sendMessage("§cYou are now friends with " + player.getName() + ".");
-                    }
-                } catch (SQLException e) {
-                    player.sendMessage("§c There was an error while trying to accept the request.");
-                    plugin.getLogger().severe("§cMySQL-ERROR while accepting a friend request: " + e.getMessage());
-                }
-           } else {
-               player.sendMessage("§cYou don't have an open request from this player.");
-           }
+            if (!checkIfThereIsRequest(target, player)) {
+                player.sendMessage("§cYou don't have an open request from this player.");
+                return true;
+            }
+            acceptFriendRequest(player, target);
         } catch (SQLException e) {
             player.sendMessage("§cThere was an error while accepting the request.");
-            plugin.getLogger().severe("§cMySQL-ERROR while getting friend request: " + e.getMessage());
+            plugin.getLogger().severe("MySQL-ERROR while handling friend request: " + e.getMessage());
         }
 
         return false;
@@ -120,6 +111,15 @@ public class FriendAcceptCommandExecutor implements CommandExecutor {
         } catch (SQLException e) {
             toPlayer.sendMessage("§cThere was an error while saving to database");
             plugin.getLogger().severe("MySQL-ERROR while inserting into friends: " + e.getMessage());
+        }
+    }
+
+    private void acceptFriendRequest(Player player, OfflinePlayer target) throws SQLException {
+        addFriend(target, player);
+        player.sendMessage("§aYou are now friends with " + target.getName() + ".");
+
+        if (target.isOnline() && target instanceof Player targetOnline) {
+            targetOnline.sendMessage("§aYou are now friends with " + player.getName() + ".");
         }
     }
 }
