@@ -42,9 +42,23 @@ public class FriendListClickListener implements Listener {
 
             FriendNameGroups group = FriendListUtils.getFriendNameGroups(player);
             List<String> allFriendNames = group.getAllFriends();
+            List<String> onlineFriends = group.onlineFriends();
 
             double MAX_PLAYERS_PER_PAGE = 36.0;
             int totalPages = (int) Math.ceil((double) allFriendNames.size() / MAX_PLAYERS_PER_PAGE);
+            int page = 1;
+
+            int start = (page - 1) * 36;
+            int end = Math.min(start + 36, allFriendNames.size());
+            String onlineStatus = "";
+
+            for (int i = start; i < end; i++) {
+                if(onlineFriends.contains(allFriendNames.get(i))) {
+                    onlineStatus = "§aONLINE";
+                } else {
+                    onlineStatus = "§cOFFLINE";
+                }
+            }
 
             player.openInventory(friendsInventory);
         }
