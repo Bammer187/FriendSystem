@@ -74,7 +74,13 @@ public class FriendAddCommandExecutor implements CommandExecutor {
                         text("§e[Click here to accept]")
                                 .clickEvent(ClickEvent.runCommand("/friend accept " + player.getName()))
                                 .hoverEvent(HoverEvent.showText(text("Click to accept the friend request")))
-                );
+                ).append(
+                        text(" ")
+                .append(
+                        text("§c[Click here to deny]")
+                                .clickEvent(ClickEvent.runCommand("/friend deny " + player.getName()))
+                                .hoverEvent(HoverEvent.showText(text("Click to deny the friend request")))
+                ));
 
         friend.sendMessage(message);
 
