@@ -49,16 +49,7 @@ public class FriendRemoveCommandExecutor implements CommandExecutor {
 
         try {
             if(canRemoveFriend(player, target)) {
-                try {
-                    removeFriend(player, target);
-                    player.sendMessage("§aYou've ended the friendship with " + target.getName() + ".");
-                    if (targetOnline != null) {
-                        targetOnline.sendMessage("§c" + player.getName() + " has ended the friendship with you.");
-                    }
-                } catch (SQLException e) {
-                    player.sendMessage("§cThere was an error while deleting this friend.");
-                    plugin.getLogger().severe("MySQL-ERROR while deleting from friends: " + e.getMessage());
-                }
+                removeFriend(player, target);
             } else {
                 player.sendMessage("§cYou aren't friends with this player.");
             }
@@ -89,7 +80,7 @@ public class FriendRemoveCommandExecutor implements CommandExecutor {
         }
     }
 
-    private void removeFriend(Player player1, OfflinePlayer player2) throws SQLException {
+    private void removeFriendSQL(Player player1, OfflinePlayer player2) throws SQLException {
         try (PreparedStatement statement = FriendSystem.getDatabase().getConnection().prepareStatement("""
                 DELETE FROM friends WHERE player_uuid = ? AND friend_uuid = ?;""")) {
 
@@ -105,6 +96,15 @@ public class FriendRemoveCommandExecutor implements CommandExecutor {
             statement.executeUpdate();
 
             FriendSystem.getDatabase().disconnect();
+        }
+    }
+
+    private void removeFriend(Player player, OfflinePlayer target) throws SQLException {
+        removeFriendSQL(player, target);
+        player.sendMessage("§aYou've ended the friendship with " + target.getName() + ".");
+
+        if (target.isOnline() && target instanceof Player targetOnline) {
+            targetOnline.sendMessage("§c" + player.getName() + " has ended the friendship with you.");
         }
     }
 }
