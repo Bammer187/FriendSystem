@@ -16,6 +16,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.List;
 
@@ -54,12 +55,16 @@ public class FriendListClickListener implements Listener {
             int end = Math.min(start + 36, allFriendNames.size());
 
             for (int i = start; i < end; i++) {
-                if(onlineFriends.contains(allFriendNames.get(i))) {
+                String friendName = allFriendNames.get(i);
+                if(onlineFriends.contains(friendName)) {
                     ItemStack friendHead = new ItemStack(Material.PLAYER_HEAD);
-                    ItemMeta meta = friendHead.getItemMeta();
+                    SkullMeta meta = (SkullMeta) friendHead.getItemMeta();
 
-                    Component friendName = Component.text(allFriendNames.get(i)).decoration(TextDecoration.ITALIC, false);;
-                    meta.displayName(friendName);
+                    Player friend = Bukkit.getPlayer(friendName);
+                    meta.setOwningPlayer(friend);
+
+                    Component friendNameComponent = Component.text(friendName).decoration(TextDecoration.ITALIC, false);;
+                    meta.displayName(friendNameComponent);
 
                     List<Component> lore = List.of(
                             Component.text("§7Status: ").append(Component.text("§aONLINE"))
@@ -73,8 +78,8 @@ public class FriendListClickListener implements Listener {
                     ItemStack friendHeadOffline = new ItemStack(Material.SKELETON_SKULL);
                     ItemMeta meta = friendHeadOffline.getItemMeta();
 
-                    Component friendName = Component.text(allFriendNames.get(i)).decoration(TextDecoration.ITALIC, false);;
-                    meta.displayName(friendName);
+                    Component friendNameComponent = Component.text(allFriendNames.get(i)).decoration(TextDecoration.ITALIC, false);;
+                    meta.displayName(friendNameComponent);
 
                     List<Component> lore = List.of(
                             Component.text("§7Status: ").append(Component.text("§cOFFLINE"))
