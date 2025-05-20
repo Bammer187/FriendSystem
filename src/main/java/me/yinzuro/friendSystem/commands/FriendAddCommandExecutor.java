@@ -54,17 +54,17 @@ public class FriendAddCommandExecutor implements CommandExecutor {
         }
 
         try {
-            if (!canSendRequest(player, target)) {
+            if (canNotSendRequest(player, target)) {
                 player.sendMessage("§cYou already sent a friend request to this player or are already friends with them.");
-                return false;
-            } else if (!canSendRequest(target, player)) {
+                return true;
+            } else if (canNotSendRequest(target, player)) {
                 player.sendMessage("§cYou already have a friend request from this player.");
-                return false;
+                return true;
             }
         } catch (SQLException e) {
             player.sendMessage("§cDatabase error while checking existing friend requests.");
             plugin.getLogger().severe("MySQL-ERROR while checking for existing friend request: " + e.getMessage());
-            return false;
+            return true;
         }
 
 
@@ -80,7 +80,7 @@ public class FriendAddCommandExecutor implements CommandExecutor {
             sendMessageToFriend(player, targetOnline);
         }
 
-        return false;
+        return true;
     }
 
     private void insertRequestIntoDatabase (Player fromPlayer, OfflinePlayer toPlayer) throws SQLException {
@@ -101,7 +101,7 @@ public class FriendAddCommandExecutor implements CommandExecutor {
         }
     }
 
-    private boolean canSendRequest(OfflinePlayer fromPlayer, OfflinePlayer toPlayer) throws SQLException {
+    private boolean canNotSendRequest(OfflinePlayer fromPlayer, OfflinePlayer toPlayer) throws SQLException {
         UUID fromUUID = fromPlayer.getUniqueId();
         UUID toUUID = toPlayer.getUniqueId();
 
@@ -126,7 +126,7 @@ public class FriendAddCommandExecutor implements CommandExecutor {
 
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
-                        return false;
+                        return true;
                     }
                 }
             }
@@ -139,12 +139,12 @@ public class FriendAddCommandExecutor implements CommandExecutor {
 
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
-                        return false;
+                        return true;
                     }
                 }
             }
 
-            return true;
+            return false;
         }
     }
 
