@@ -48,11 +48,10 @@ public class FriendDenyCommandExecutor implements CommandExecutor {
         }
 
         try {
-            if (checkIfThereIsRequest(friend, player)) {
+            if (checkIfThereIsRequest(target, player)) {
                 try {
-                    denyRequest(friend, player);
-                    player.sendMessage("§cYou denied the friend request from " + friend.getName());
-                    friend.sendMessage("§c" + player.getName() + " has denied your friend request.");
+                    denyRequest(target, player);
+                    player.sendMessage("§cYou denied the friend request from " + target.getName());
                 } catch (SQLException e) {
                     player.sendMessage("§cThere was an error while denying the request.");
                     plugin.getLogger().severe("MySQL-ERROR while trying to delete from open_friend_requests: " + e.getMessage());
@@ -64,10 +63,15 @@ public class FriendDenyCommandExecutor implements CommandExecutor {
             player.sendMessage("§cThere was an error while denying the request.");
             plugin.getLogger().severe("§cMySQL-ERROR while getting friend request: " + e.getMessage());
         }
-        return false;
+
+        if (targetOnline != null) {
+            targetOnline.sendMessage("§c" + player.getName() + " has denied your friend request.");
+        }
+
+        return true;
     }
 
-    private void denyRequest(Player fromPlayer, Player toPlayer) throws SQLException {
+    private void denyRequest(OfflinePlayer fromPlayer, Player toPlayer) throws SQLException {
         try (PreparedStatement statement = FriendSystem.getDatabase().getConnection().prepareStatement("""
                 DELETE FROM open_friend_requests WHERE player_uuid = ? AND from_player_uuid = ?;""")) {
 
@@ -82,7 +86,7 @@ public class FriendDenyCommandExecutor implements CommandExecutor {
         }
     }
 
-    private boolean checkIfThereIsRequest(Player fromPlayer, Player toPlayer) throws SQLException {
+    private boolean checkIfThereIsRequest(OfflinePlayer fromPlayer, Player toPlayer) throws SQLException {
         String query = """
         SELECT 1 FROM open_friend_requests
         WHERE player_uuid = ? AND from_player_uuid = ?
