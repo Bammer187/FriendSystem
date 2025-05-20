@@ -1,5 +1,6 @@
 package me.yinzuro.friendSystem.commands;
 
+import static me.yinzuro.friendSystem.utils.ChatPrefix.PREFIX;
 import me.yinzuro.friendSystem.FriendSystem;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -23,12 +24,12 @@ public class FriendDenyCommandExecutor implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String @NotNull [] strings) {
         if (!(commandSender instanceof Player player)) {
-            commandSender.sendMessage("§cYou aren't a player");
+            commandSender.sendMessage(PREFIX + "§cYou aren't a player");
             return true;
         }
 
         if (strings.length != 1) {
-            player.sendMessage("§cUsage: /friend deny <Player>");
+            player.sendMessage(PREFIX + "Usage: /friend deny <Player>");
             return true;
         }
 
@@ -38,12 +39,12 @@ public class FriendDenyCommandExecutor implements CommandExecutor {
         OfflinePlayer target = targetOnline != null ? targetOnline : Bukkit.getOfflinePlayer(targetName);
 
         if (target.getUniqueId().equals(player.getUniqueId())) {
-            player.sendMessage("§cYou can't add yourself.");
+            player.sendMessage(PREFIX + "You can't deny yourself.");
             return true;
         }
 
         if (target.getName() == null || (!target.hasPlayedBefore() && !target.isOnline())) {
-            player.sendMessage("§cThis player was never online before.");
+            player.sendMessage(PREFIX + "This player was never online before.");
             return true;
         }
 
@@ -51,19 +52,19 @@ public class FriendDenyCommandExecutor implements CommandExecutor {
             if (checkIfThereIsRequest(target, player)) {
                 try {
                     denyRequest(target, player);
-                    player.sendMessage("§cYou denied the friend request from " + target.getName());
+                    player.sendMessage(PREFIX + "You denied the friend request from §e" + target.getName() + "§7.");
                     if (targetOnline != null) {
-                        targetOnline.sendMessage("§c" + player.getName() + " has denied your friend request.");
+                        targetOnline.sendMessage(PREFIX + "§e" + player.getName() + " §7has denied your friend request.");
                     }
                 } catch (SQLException e) {
-                    player.sendMessage("§cThere was an error while denying the request.");
+                    player.sendMessage(PREFIX + "§cThere was an error while denying the request.");
                     plugin.getLogger().severe("MySQL-ERROR while trying to delete from open_friend_requests: " + e.getMessage());
                 }
             } else {
-                player.sendMessage("§cYou don't have an open request from this player.");
+                player.sendMessage(PREFIX + "You don't have an open request from this player.");
             }
         } catch (SQLException e) {
-            player.sendMessage("§cThere was an error while denying the request.");
+            player.sendMessage(PREFIX + "§cThere was an error while denying the request.");
             plugin.getLogger().severe("§cMySQL-ERROR while getting friend request: " + e.getMessage());
         }
 
