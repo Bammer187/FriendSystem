@@ -17,6 +17,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -75,24 +76,30 @@ public class FriendListClickListener implements Listener {
                     friendsInventory.setItem(i + 9, friendHead);
 
                 } else {
-                    ItemStack friendHeadOffline = new ItemStack(Material.SKELETON_SKULL);
-                    ItemMeta meta = friendHeadOffline.getItemMeta();
-
-                    Component friendNameComponent = Component.text(allFriendNames.get(i)).decoration(TextDecoration.ITALIC, false);;
-                    meta.displayName(friendNameComponent);
-
-                    List<Component> lore = List.of(
-                            Component.text("§7Status: ").append(Component.text("§cOFFLINE"))
-                    );
-                    meta.lore(lore);
-
-                    friendHeadOffline.setItemMeta(meta);
+                    ItemStack friendHeadOffline = getFriendHeadOffline(allFriendNames, i);
                     friendsInventory.setItem(i + 9, friendHeadOffline);
                 }
             }
 
             player.openInventory(friendsInventory);
         }
+    }
+
+    private static @NotNull ItemStack getFriendHeadOffline(List<String> allFriendNames, int i) {
+        ItemStack friendHeadOffline = new ItemStack(Material.SKELETON_SKULL);
+        ItemMeta meta = friendHeadOffline.getItemMeta();
+
+        Component friendNameComponent = Component.text(allFriendNames.get(i)).decoration(TextDecoration.ITALIC, false);
+        ;
+        meta.displayName(friendNameComponent);
+
+        List<Component> lore = List.of(
+                Component.text("§7Status: ").append(Component.text("§cOFFLINE"))
+        );
+        meta.lore(lore);
+
+        friendHeadOffline.setItemMeta(meta);
+        return friendHeadOffline;
     }
 
     @EventHandler
