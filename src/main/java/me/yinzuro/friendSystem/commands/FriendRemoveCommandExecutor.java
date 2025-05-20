@@ -2,6 +2,7 @@ package me.yinzuro.friendSystem.commands;
 
 import me.yinzuro.friendSystem.FriendSystem;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -31,12 +32,18 @@ public class FriendRemoveCommandExecutor implements CommandExecutor {
             return true;
         }
 
-        Player friend = Bukkit.getPlayerExact(strings[0]);
-        if (friend == null) {
-            player.sendMessage("§cCouldn't find a player with the given name.");
+        String targetName = strings[0];
+
+        Player targetOnline = Bukkit.getPlayerExact(targetName);
+        OfflinePlayer target = targetOnline != null ? targetOnline : Bukkit.getOfflinePlayer(targetName);
+
+        if (target.getUniqueId().equals(player.getUniqueId())) {
+            player.sendMessage("§cYou can't add yourself.");
             return true;
-        } else if (friend == player) {
-            player.sendMessage("§cYou don't have yourself as friend.");
+        }
+
+        if (target.getName() == null || (!target.hasPlayedBefore() && !target.isOnline())) {
+            player.sendMessage("§cThis player was never online before.");
             return true;
         }
 
