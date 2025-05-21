@@ -9,6 +9,7 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -320,6 +321,14 @@ public class FriendListClickListener implements Listener {
             ItemStack glassPane = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
             removeInventory.setItem(i, glassPane);
         }
+
+        ItemStack friendHead = new ItemStack(Material.PLAYER_HEAD);
+        SkullMeta friendHeadMeta = (SkullMeta) friendHead.getItemMeta();
+        OfflinePlayer friend =  Bukkit.getOfflinePlayer(friendName);
+        friendHeadMeta.setOwningPlayer(friend);
+        friendHeadMeta.displayName(Component.text("§e" + friendName));
+        friendHead.setItemMeta(friendHeadMeta);
+        removeInventory.setItem(22, friendHead);
 
         ItemStack backToFriendList = new ItemStack(Material.BARRIER);
         ItemMeta backToFriendListMeta = backToFriendList.getItemMeta();
