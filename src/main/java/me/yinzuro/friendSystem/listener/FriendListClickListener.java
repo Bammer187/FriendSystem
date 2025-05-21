@@ -192,6 +192,27 @@ public class FriendListClickListener implements Listener {
             friendRequestsInventory.setItem(i, glassPane);
         }
 
+        List<UUID> openFriendRequests = getOpenFriendRequests(player);
+        List<String> friendNames = new ArrayList<>();
+        for (UUID uuid : openFriendRequests) {
+            String friendName = Bukkit.getOfflinePlayer(uuid).getName();
+            friendNames.add(friendName);
+        }
+
+        int start = (page - 1) * 36;
+        int end = Math.min(start + 36, friendNames.size());
+
+        for (int i = start; i < end; i++) {
+            String friendName = friendNames.get(i);
+            ItemStack requestPaper = new ItemStack(Material.FILLED_MAP);
+
+            ItemMeta requestPaperMeta = requestPaper.getItemMeta();
+            requestPaperMeta.displayName(Component.text("§e" + friendName));
+            requestPaper.setItemMeta(requestPaperMeta);
+
+            friendRequestsInventory.setItem(i + 9, requestPaper);
+        }
+
         ItemStack previousPage = new ItemStack(Material.ARROW);
         ItemMeta prevMeta = previousPage.getItemMeta();
         prevMeta.displayName(Component.text("§7← Previous Page").decoration(TextDecoration.ITALIC, false));
