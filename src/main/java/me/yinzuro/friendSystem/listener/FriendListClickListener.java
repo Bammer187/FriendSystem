@@ -206,7 +206,10 @@ public class FriendListClickListener implements Listener {
         player.openInventory(friendRequestsInventory);
     }
 
-    private void getOpenFriendRequests(Player player) {
-
+    private List<UUID> getOpenFriendRequests(Player player) {
+        String query = """
+        SELECT * FROM open_friend_requests
+        WHERE player_uuid = ?;
+        """;
     }
 }
