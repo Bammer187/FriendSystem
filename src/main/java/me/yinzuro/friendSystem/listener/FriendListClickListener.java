@@ -107,6 +107,7 @@ public class FriendListClickListener implements Listener {
             return;
         }
 
+        if (clicked == null || clicked.getType() == Material.AIR) return;
     }
 
     @EventHandler
