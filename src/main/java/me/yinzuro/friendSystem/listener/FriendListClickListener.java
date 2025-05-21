@@ -92,12 +92,12 @@ public class FriendListClickListener implements Listener {
         Player player = (Player) event.getWhoClicked();
         int slot = event.getRawSlot();
 
-        if (slot == 45) {
+        if (slot == 45 && event.getView().title().equals(titleFriendList)) {
             int newPage = Math.max(1, playerPages.get(player.getUniqueId()) - 1);
             playerPages.put(player.getUniqueId(), newPage);
             openFriendInventory(player, newPage);
         }
-        else if (slot == 53) {
+        else if (slot == 53 && event.getView().title().equals(titleFriendList)) {
             double MAX_PLAYERS_PER_PAGE = 36.0;
             FriendNameGroups group = FriendListUtils.getFriendNameGroups(player);
             List<String> allFriendNames = group.getAllFriends();
