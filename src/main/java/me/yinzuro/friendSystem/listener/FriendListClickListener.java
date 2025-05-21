@@ -107,50 +107,6 @@ public class FriendListClickListener implements Listener {
             return;
         }
 
-        if (event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.CHEST) {
-            player.closeInventory();
-            Bukkit.getScheduler().runTaskLater(plugin, () -> openFriendRequestsInventory(player, 1), 2L);
-        }
-        else if (event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.BARRIER && (event.getView().title().equals(titleFriendRequests) || event.getView().title().equals(titleRemove))) {
-            player.closeInventory();
-            Bukkit.getScheduler().runTaskLater(plugin, () -> openFriendInventory(player, 1), 2L);
-        }
-        else if (event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.BARRIER && event.getView().title().equals(titleAcceptDeny)) {
-            player.closeInventory();
-            Bukkit.getScheduler().runTaskLater(plugin, () -> openFriendRequestsInventory(player, 1), 2L);
-        }
-        else if (event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.FILLED_MAP && event.getView().title().equals(titleFriendRequests)) {
-            player.closeInventory();
-            Component friendName = event.getCurrentItem().displayName();
-            String plainName = removeFirstAndLastChar(PlainTextComponentSerializer.plainText().serialize(friendName));
-            Bukkit.getScheduler().runTaskLater(plugin, () -> openAcceptDenyInventory(player, plainName), 2L);
-        }
-        else if (event.getCurrentItem() != null && (event.getCurrentItem().getType() == Material.PLAYER_HEAD || event.getCurrentItem().getType() == Material.SKELETON_SKULL) && event.getView().title().equals(titleFriendList)) {
-            player.closeInventory();
-            Component friendName = event.getCurrentItem().displayName();
-            String plainName = removeFirstAndLastChar(PlainTextComponentSerializer.plainText().serialize(friendName));
-            Bukkit.getScheduler().runTaskLater(plugin, () -> openRemoveInventory(player, plainName), 2L);
-        } else if (event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.LIME_DYE) {
-            ItemStack nameItem = event.getInventory().getItem(22);
-            if (nameItem != null && nameItem.hasItemMeta() && nameItem.getItemMeta().hasDisplayName()) {
-                String friendName = PlainTextComponentSerializer.plainText().serialize(nameItem.getItemMeta().displayName()).replace("§e", "");
-                player.performCommand("friend accept " + friendName);
-                player.closeInventory();
-            }
-        }
-        else if (event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.RED_DYE) {
-            ItemStack nameItem = event.getInventory().getItem(22);
-            if (nameItem != null && nameItem.hasItemMeta() && nameItem.getItemMeta().hasDisplayName()) {
-                    String friendName = PlainTextComponentSerializer.plainText().serialize(nameItem.getItemMeta().displayName()).replace("§e", "");
-                if(event.getView().title().equals(titleAcceptDeny)) {
-                    player.performCommand("friend deny " + friendName);
-                }
-                else if (event.getView().title().equals(titleRemove)) {
-                    player.performCommand("friend remove " + friendName);
-                }
-                player.closeInventory();
-            }
-        }
     }
 
     @EventHandler
