@@ -274,7 +274,8 @@ public class FriendListClickListener implements Listener {
 
         ItemStack friendNamePaper = new ItemStack(Material.FILLED_MAP);
         ItemMeta friendNameMeta = friendNamePaper.getItemMeta();
-        friendNameMeta.displayName(Component.text(friendName));
+        friendName = removeFirstAndLastChar(friendName);
+        friendNameMeta.displayName(Component.text("§e" + friendName));
         friendNamePaper.setItemMeta(friendNameMeta);
         acceptDenyInventory.setItem(22, friendNamePaper);
 
@@ -315,6 +316,7 @@ public class FriendListClickListener implements Listener {
 
         ItemStack friendNameMap = new ItemStack(Material.FILLED_MAP);
         ItemMeta friendNameMapMeta = friendNameMap.getItemMeta();
+        friendName = removeFirstAndLastChar(friendName);
         friendNameMapMeta.displayName(Component.text("§e" + friendName));
         friendNameMap.setItemMeta(friendNameMapMeta);
         removeInventory.setItem(22, friendNameMap);
@@ -361,6 +363,11 @@ public class FriendListClickListener implements Listener {
         }
 
         return friendUUIDs;
+    }
+
+    private String removeFirstAndLastChar(String str) {
+        str = str.substring(1, str.length() - 1);
+        return str;
     }
 
     private void handleFriendListNavigation(Player player, int slot) {

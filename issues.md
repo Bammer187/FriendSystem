@@ -22,4 +22,4 @@
 20. (X) ISSUE-020: Update text sent to the player
 21. (X) ISSUE-021: new inventory in friend list GUI for friend request
 22. (X) ISSUE-022: remove friends from friend list GUI
-23. () ISSUE-023: Refractor ifs in FriendListClickListener
+23. (X) ISSUE-023: Refractor ifs in FriendListClickListener
