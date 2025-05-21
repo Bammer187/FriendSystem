@@ -422,4 +422,8 @@ public class FriendListClickListener implements Listener {
             openFriendInventory(player, page);
         }
     }
+
+    private void handleFriendRequestsNavigation(Player player, int slot) {
+
+    }
 }
