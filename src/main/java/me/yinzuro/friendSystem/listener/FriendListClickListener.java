@@ -113,6 +113,10 @@ public class FriendListClickListener implements Listener {
             player.closeInventory();
             Bukkit.getScheduler().runTaskLater(plugin, () -> openFriendRequestsInventory(player, 1), 2L);
         }
+        else if (event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.BARRIER) {
+            player.closeInventory();
+            Bukkit.getScheduler().runTaskLater(plugin, () -> openFriendInventory(player, 1), 2L);
+        }
     }
 
     @EventHandler
@@ -159,13 +163,13 @@ public class FriendListClickListener implements Listener {
 
         ItemStack previousPage = new ItemStack(Material.ARROW);
         ItemMeta prevMeta = previousPage.getItemMeta();
-        prevMeta.displayName(Component.text("§7← Previous Page").decoration(TextDecoration.ITALIC, false));
+        prevMeta.displayName(Component.text("§7← Previous Page"));
         previousPage.setItemMeta(prevMeta);
         friendsInventory.setItem(45, previousPage);
 
         ItemStack nextPage = new ItemStack(Material.ARROW);
         ItemMeta nextMeta = nextPage.getItemMeta();
-        nextMeta.displayName(Component.text("§7Next Page →").decoration(TextDecoration.ITALIC, false));
+        nextMeta.displayName(Component.text("§7Next Page →"));
         nextPage.setItemMeta(nextMeta);
         friendsInventory.setItem(53, nextPage);
 
@@ -215,15 +219,21 @@ public class FriendListClickListener implements Listener {
 
         ItemStack previousPage = new ItemStack(Material.ARROW);
         ItemMeta prevMeta = previousPage.getItemMeta();
-        prevMeta.displayName(Component.text("§7← Previous Page").decoration(TextDecoration.ITALIC, false));
+        prevMeta.displayName(Component.text("§7← Previous Page"));
         previousPage.setItemMeta(prevMeta);
         friendRequestsInventory.setItem(45, previousPage);
 
         ItemStack nextPage = new ItemStack(Material.ARROW);
         ItemMeta nextMeta = nextPage.getItemMeta();
-        nextMeta.displayName(Component.text("§7Next Page →").decoration(TextDecoration.ITALIC, false));
+        nextMeta.displayName(Component.text("§7Next Page →"));
         nextPage.setItemMeta(nextMeta);
         friendRequestsInventory.setItem(53, nextPage);
+
+        ItemStack backToFriendList = new ItemStack(Material.BARRIER);
+        ItemMeta backToFriendListMeta = backToFriendList.getItemMeta();
+        backToFriendListMeta.displayName(Component.text("§cBack"));
+        backToFriendList.setItemMeta(backToFriendListMeta);
+        friendRequestsInventory.setItem(49, backToFriendList);
 
         player.openInventory(friendRequestsInventory);
     }
