@@ -16,7 +16,7 @@ import java.util.UUID;
 
 public class FriendListUtils {
 
-    private static final JavaPlugin plugin = FriendSystem.getInstance();
+    public static final JavaPlugin plugin = FriendSystem.getInstance();
 
     public static List<UUID> getAllFriends(Player player) throws SQLException {
         String query = """

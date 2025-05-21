@@ -1,5 +1,6 @@
 package me.yinzuro.friendSystem.listener;
 
+import me.yinzuro.friendSystem.FriendSystem;
 import me.yinzuro.friendSystem.utils.FriendListUtils;
 import me.yinzuro.friendSystem.utils.FriendNameGroups;
 import net.kyori.adventure.text.Component;
@@ -17,6 +18,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -27,6 +29,7 @@ import java.util.UUID;
 public class FriendListClickListener implements Listener {
 
     private final Map<UUID, Integer> playerPages = new HashMap<>();
+    private final JavaPlugin plugin = FriendSystem.getInstance();
 
     @EventHandler
     public void onItemClick(PlayerInteractEvent event) {
@@ -103,6 +106,11 @@ public class FriendListClickListener implements Listener {
             playerPages.put(player.getUniqueId(), newPage);
             openFriendInventory(player, newPage);
         }
+
+        if (event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.CHEST) {
+            player.closeInventory();
+            Bukkit.getScheduler().runTaskLater(plugin, () -> openFriendRequestsInventory(player, 1), 2L);
+        }
     }
 
     @EventHandler
@@ -168,29 +176,31 @@ public class FriendListClickListener implements Listener {
     }
 
     public void openFriendRequestsInventory(Player player, int page) {
-        Component title = Component.text("bYour friend requests");
-        Inventory friendsInventory = Bukkit.createInventory(null, 54, title);
+        Component title = Component.text("§bYour friend requests");
+        Inventory friendRequestsInventory = Bukkit.createInventory(null, 54, title);
 
         for (int i=0; i<9; i++) {
             ItemStack glassPane = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
-            friendsInventory.setItem(i, glassPane);
+            friendRequestsInventory.setItem(i, glassPane);
         }
 
         for (int i=46; i<53; i++) {
             ItemStack glassPane = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
-            friendsInventory.setItem(i, glassPane);
+            friendRequestsInventory.setItem(i, glassPane);
         }
 
         ItemStack previousPage = new ItemStack(Material.ARROW);
         ItemMeta prevMeta = previousPage.getItemMeta();
         prevMeta.displayName(Component.text("§7← Previous Page").decoration(TextDecoration.ITALIC, false));
         previousPage.setItemMeta(prevMeta);
-        friendsInventory.setItem(45, previousPage);
+        friendRequestsInventory.setItem(45, previousPage);
 
         ItemStack nextPage = new ItemStack(Material.ARROW);
         ItemMeta nextMeta = nextPage.getItemMeta();
         nextMeta.displayName(Component.text("§7Next Page →").decoration(TextDecoration.ITALIC, false));
         nextPage.setItemMeta(nextMeta);
-        friendsInventory.setItem(53, nextPage);
+        friendRequestsInventory.setItem(53, nextPage);
+
+        player.openInventory(friendRequestsInventory);
     }
 }
