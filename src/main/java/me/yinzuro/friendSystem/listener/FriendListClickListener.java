@@ -239,7 +239,20 @@ public class FriendListClickListener implements Listener {
     }
 
     public void openAcceptDenyInventory(Player player) {
+        Component title = Component.text("§bFriend request");
+        Inventory acceptDenyInventory = Bukkit.createInventory(null, 54, title);
 
+        for (int i=0; i<9; i++) {
+            ItemStack glassPane = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
+            acceptDenyInventory.setItem(i, glassPane);
+        }
+
+        for (int i=45; i<54; i++) {
+            ItemStack glassPane = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
+            acceptDenyInventory.setItem(i, glassPane);
+        }
+
+        player.openInventory(acceptDenyInventory);
     }
 
     private List<UUID> getOpenFriendRequests(Player player) {
