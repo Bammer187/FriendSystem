@@ -1,5 +1,6 @@
 package me.yinzuro.friendSystem.commands;
 
+import static me.yinzuro.friendSystem.utils.ChatPrefix.PREFIX;
 import me.yinzuro.friendSystem.FriendSystem;
 import me.yinzuro.friendSystem.utils.MessageUtils;
 import org.bukkit.Bukkit;
@@ -19,12 +20,12 @@ public class RespondCommandExecutor implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String @NotNull [] strings) {
         if (!(commandSender instanceof Player player)) {
-            commandSender.sendMessage("§cYou aren't a player.");
+            commandSender.sendMessage(PREFIX + "§cYou aren't a player.");
             return true;
         }
 
         if (strings.length != 1) {
-            player.sendMessage("§cUsage: /respond <message>");
+            player.sendMessage(PREFIX + "Usage: /respond <message>");
             return true;
         }
 
@@ -33,12 +34,12 @@ public class RespondCommandExecutor implements CommandExecutor {
             if (lastMessaged != null) {
                 Player friend = Bukkit.getPlayer(lastMessaged);
                 if (friend == null) {
-                    player.sendMessage("§cThe player is not online.");
+                    player.sendMessage(PREFIX + "The player is not online.");
                     return true;
                 }
                 MessageUtils.sendPrivateMessage(player, friend, strings[0]);
             } else {
-                player.sendMessage("You didn't write with a player.");
+                player.sendMessage(PREFIX + "You didn't write with a player.");
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
