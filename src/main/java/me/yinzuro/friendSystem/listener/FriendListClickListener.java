@@ -117,7 +117,7 @@ public class FriendListClickListener implements Listener {
             player.closeInventory();
             Bukkit.getScheduler().runTaskLater(plugin, () -> openFriendRequestsInventory(player, 1), 2L);
         }
-        else if (event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.BARRIER && event.getView().title().equals(titleFriendRequests)) {
+        else if (event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.BARRIER && (event.getView().title().equals(titleFriendRequests) || event.getView().title().equals(titleRemove))) {
             player.closeInventory();
             Bukkit.getScheduler().runTaskLater(plugin, () -> openFriendInventory(player, 1), 2L);
         }
