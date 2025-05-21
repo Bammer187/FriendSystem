@@ -26,7 +26,7 @@ Additionally, a simple GUI for the friend list is available by right-clicking a 
 ## Installation
 
 1. Download  
-Download the latest version of the plugin from the Releases tab.  
+Download the latest version of the plugin from the [Releases](https://github.com/Bammer187/FriendSystem/releases) tab.  
 *(Alternatively: compile it yourself using Maven or Gradle if you've made changes to the source code.)*
 
 2. Place in Plugins Folder  
@@ -34,7 +34,7 @@ Put the downloaded **.jar** file into your server’s **plugins/** directory.
 
 3. Create config.yml  
 Create a folder **Friendsystem** in your plugins/ folder and create a file named config.yml in there.
-In this config.yml, you should write the connection identifiers to your database:
+In this config.yml you should write the connection identifiers to your database:
 
 ```
 mysql:
