@@ -6,6 +6,7 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class FriendInventoryUtils {
@@ -26,11 +27,16 @@ public final class FriendInventoryUtils {
         Bukkit.getScheduler().runTaskLater(plugin, task, 2L);
     }
 
-    private String extractName(Component displayName) {
+    private static String extractName(Component displayName) {
         return PlainTextComponentSerializer.plainText().serialize(displayName).replace("§e", "").strip();
     }
 
     public static void handleCommandItem(Player player, Inventory inv, String baseCommand) {
-
+        ItemStack nameItem = inv.getItem(22);
+        if (nameItem != null && nameItem.hasItemMeta() && nameItem.getItemMeta().hasDisplayName()) {
+            String name = extractName(nameItem.getItemMeta().displayName());
+            player.performCommand(baseCommand + " " + name);
+            player.closeInventory();
+        }
     }
 }
