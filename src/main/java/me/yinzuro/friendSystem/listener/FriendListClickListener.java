@@ -129,7 +129,11 @@ public class FriendListClickListener implements Listener {
                 }
             }
             case PLAYER_HEAD, SKELETON_SKULL -> {
-
+                if (title.equals(FriendInventoryUtils.FRIEND_LIST)) {
+                    String name = FriendInventoryUtils.extractName(clicked.displayName());
+                    player.closeInventory();
+                    FriendInventoryUtils.runLater(() -> openRemoveInventory(player, name));
+                }
             }
             case LIME_DYE -> {
 
