@@ -2,6 +2,7 @@ package me.yinzuro.friendSystem.utils;
 
 import me.yinzuro.friendSystem.FriendSystem;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -24,6 +25,6 @@ public final class FriendInventoryUtils {
     }
 
     private String extractName(Component displayName) {
-
+        return PlainTextComponentSerializer.plainText().serialize(displayName).replace("§e", "").strip();
     }
 }
