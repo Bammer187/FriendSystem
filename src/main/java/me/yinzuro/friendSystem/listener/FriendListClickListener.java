@@ -158,11 +158,11 @@ public class FriendListClickListener implements Listener {
         nextPage.setItemMeta(nextMeta);
         friendsInventory.setItem(53, nextPage);
 
-        ItemStack friendRequets = new ItemStack(Material.CHEST);
-        ItemMeta friendRequestsMeta = friendRequets.getItemMeta();
+        ItemStack friendRequests = new ItemStack(Material.CHEST);
+        ItemMeta friendRequestsMeta = friendRequests.getItemMeta();
         friendRequestsMeta.displayName(Component.text("§eFriend requests"));
-        friendRequets.setItemMeta(friendRequestsMeta);
-        friendsInventory.setItem(49, friendRequets);
+        friendRequests.setItemMeta(friendRequestsMeta);
+        friendsInventory.setItem(49, friendRequests);
 
         player.openInventory(friendsInventory);
     }
@@ -180,5 +180,17 @@ public class FriendListClickListener implements Listener {
             ItemStack glassPane = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
             friendsInventory.setItem(i, glassPane);
         }
+
+        ItemStack previousPage = new ItemStack(Material.ARROW);
+        ItemMeta prevMeta = previousPage.getItemMeta();
+        prevMeta.displayName(Component.text("§7← Previous Page").decoration(TextDecoration.ITALIC, false));
+        previousPage.setItemMeta(prevMeta);
+        friendsInventory.setItem(45, previousPage);
+
+        ItemStack nextPage = new ItemStack(Material.ARROW);
+        ItemMeta nextMeta = nextPage.getItemMeta();
+        nextMeta.displayName(Component.text("§7Next Page →").decoration(TextDecoration.ITALIC, false));
+        nextPage.setItemMeta(nextMeta);
+        friendsInventory.setItem(53, nextPage);
     }
 }
