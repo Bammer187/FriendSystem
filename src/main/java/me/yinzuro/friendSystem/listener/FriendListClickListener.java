@@ -238,7 +238,7 @@ public class FriendListClickListener implements Listener {
         player.openInventory(friendRequestsInventory);
     }
 
-    public void openAcceptDenyInventory(Player player) {
+    public void openAcceptDenyInventory(Player player, String friendName) {
         Component title = Component.text("§bFriend request");
         Inventory acceptDenyInventory = Bukkit.createInventory(null, 54, title);
 
@@ -251,6 +251,30 @@ public class FriendListClickListener implements Listener {
             ItemStack glassPane = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
             acceptDenyInventory.setItem(i, glassPane);
         }
+
+        ItemStack friendNamePaper = new ItemStack(Material.FILLED_MAP);
+        ItemMeta friendNameMeta = friendNamePaper.getItemMeta();
+        friendNameMeta.displayName(Component.text("§e" + friendName));
+        friendNamePaper.setItemMeta(friendNameMeta);
+        acceptDenyInventory.setItem(22, friendNamePaper);
+
+        ItemStack accept = new ItemStack(Material.LIME_DYE);
+        ItemMeta acceptMeta = accept.getItemMeta();
+        acceptMeta.displayName(Component.text("§aAccept friend request"));
+        accept.setItemMeta(acceptMeta);
+        acceptDenyInventory.setItem(30, accept);
+
+        ItemStack deny = new ItemStack(Material.RED_DYE);
+        ItemMeta denyMeta = deny.getItemMeta();
+        denyMeta.displayName(Component.text("§4Deny friend request"));
+        deny.setItemMeta(denyMeta);
+        acceptDenyInventory.setItem(32, deny);
+
+        ItemStack backToFriendRequests = new ItemStack(Material.BARRIER);
+        ItemMeta backToFriendRequestsMeta = backToFriendRequests.getItemMeta();
+        backToFriendRequestsMeta.displayName(Component.text("§cBack"));
+        backToFriendRequests.setItemMeta(backToFriendRequestsMeta);
+        acceptDenyInventory.setItem(49, backToFriendRequests);
 
         player.openInventory(acceptDenyInventory);
     }
