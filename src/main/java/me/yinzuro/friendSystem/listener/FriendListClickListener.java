@@ -86,7 +86,8 @@ public class FriendListClickListener implements Listener {
     public void onInventoryClick(InventoryClickEvent event) {
         Component titleFriendList = Component.text("§bYour friends");
         Component titleFriendRequests = Component.text("§bYour friend requests");
-        if (!event.getView().title().equals(titleFriendList) && !event.getView().title().equals(titleFriendRequests)) return;
+        Component titleAcceptDeny = Component.text("§bFriend request");
+        if (!event.getView().title().equals(titleFriendList) && !event.getView().title().equals(titleFriendRequests) && !event.getView().title().equals(titleAcceptDeny)) return;
 
         event.setCancelled(true);
 
@@ -113,9 +114,17 @@ public class FriendListClickListener implements Listener {
             player.closeInventory();
             Bukkit.getScheduler().runTaskLater(plugin, () -> openFriendRequestsInventory(player, 1), 2L);
         }
-        else if (event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.BARRIER) {
+        else if (event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.BARRIER && event.getView().title().equals(titleFriendRequests)) {
             player.closeInventory();
             Bukkit.getScheduler().runTaskLater(plugin, () -> openFriendInventory(player, 1), 2L);
+        }
+        else if (event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.BARRIER && event.getView().title().equals(titleAcceptDeny)) {
+            player.closeInventory();
+            Bukkit.getScheduler().runTaskLater(plugin, () -> openFriendRequestsInventory(player, 1), 2L);
+        }
+        else if (event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.FILLED_MAP && event.getView().title().equals(titleFriendRequests)) {
+            player.closeInventory();
+            Bukkit.getScheduler().runTaskLater(plugin, () -> openAcceptDenyInventory(player, "test"), 2L);
         }
     }
 
