@@ -15,8 +15,8 @@ public final class FriendInventoryUtils {
 
     public static final Component FRIEND_LIST = Component.text("§bYour friends");
     public static final Component FRIEND_REQUESTS = Component.text("§bYour friend requests");
-    static final Component ACCEPT_DENY = Component.text("§bFriend request");
-    static final Component REMOVE = Component.text("§bRemove friend");
+    public static final Component ACCEPT_DENY = Component.text("§bFriend request");
+    public static final Component REMOVE = Component.text("§bRemove friend");
 
     public static boolean isHandledTitle(Component title) {
         return title.equals(FriendInventoryUtils.FRIEND_LIST) || title.equals(FriendInventoryUtils.FRIEND_REQUESTS)

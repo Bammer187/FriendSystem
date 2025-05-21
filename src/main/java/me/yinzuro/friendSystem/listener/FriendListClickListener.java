@@ -115,7 +115,11 @@ public class FriendListClickListener implements Listener {
                 FriendInventoryUtils.runLater(() -> openFriendRequestsInventory(player, 1));
             }
             case BARRIER -> {
-
+                player.closeInventory();
+                if (title.equals(FriendInventoryUtils.FRIEND_REQUESTS) || title.equals(FriendInventoryUtils.REMOVE))
+                    FriendInventoryUtils.runLater(() -> openFriendInventory(player, 1));
+                else if (title.equals(FriendInventoryUtils.ACCEPT_DENY))
+                    FriendInventoryUtils.runLater(() -> openFriendRequestsInventory(player, 1));
             }
             case FILLED_MAP -> {
 
