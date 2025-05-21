@@ -333,13 +333,11 @@ public class FriendListClickListener implements Listener {
             removeInventory.setItem(i, glassPane);
         }
 
-        ItemStack friendHead = new ItemStack(Material.PLAYER_HEAD);
-        SkullMeta friendHeadMeta = (SkullMeta) friendHead.getItemMeta();
-        OfflinePlayer friend =  Bukkit.getOfflinePlayer(friendName);
-        friendHeadMeta.setOwningPlayer(friend);
-        friendHeadMeta.displayName(Component.text("§e" + friendName));
-        friendHead.setItemMeta(friendHeadMeta);
-        removeInventory.setItem(22, friendHead);
+        ItemStack friendNameMap = new ItemStack(Material.FILLED_MAP);
+        ItemMeta friendNameMapMeta = friendNameMap.getItemMeta();
+        friendNameMapMeta.displayName(Component.text("§e" + friendName));
+        friendNameMap.setItemMeta(friendNameMapMeta);
+        removeInventory.setItem(22, friendNameMap);
 
         ItemStack remove = new ItemStack(Material.RED_DYE);
         ItemMeta removeMeta = remove.getItemMeta();
