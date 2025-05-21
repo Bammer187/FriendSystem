@@ -1,5 +1,6 @@
 package me.yinzuro.friendSystem.commands;
 
+import static me.yinzuro.friendSystem.utils.ChatPrefix.PREFIX;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -16,7 +17,7 @@ public class FriendCommandExecutor implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String @NotNull [] strings) {
         if (strings.length == 0) {
-            commandSender.sendMessage("§cUsage: /friend <add|remove|list|accept|deny> <player>");
+            commandSender.sendMessage(PREFIX + "Usage: /friend <add|remove|list|accept|deny> <player>");
             return true;
         }
 
@@ -41,7 +42,7 @@ public class FriendCommandExecutor implements CommandExecutor {
                 return listExecutor.onCommand(commandSender, command, s, subStrings);
             }
             default: {
-                commandSender.sendMessage("§cUnknown command.");
+                commandSender.sendMessage(PREFIX + "Unknown command.");
                 return true;
             }
         }
