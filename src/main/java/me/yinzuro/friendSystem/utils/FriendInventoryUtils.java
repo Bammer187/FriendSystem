@@ -12,4 +12,8 @@ public final class FriendInventoryUtils {
         return title.equals(FriendInventoryUtils.FRIEND_LIST) || title.equals(FriendInventoryUtils.FRIEND_REQUESTS)
                 || title.equals(FriendInventoryUtils.ACCEPT_DENY) || title.equals(FriendInventoryUtils.REMOVE);
     }
+
+    private void runLater(Runnable task) {
+
+    }
 }
