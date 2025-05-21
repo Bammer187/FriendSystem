@@ -1,5 +1,6 @@
 package me.yinzuro.friendSystem.listener;
 
+import static  me.yinzuro.friendSystem.utils.ChatPrefix.PREFIX;
 import me.yinzuro.friendSystem.FriendSystem;
 import me.yinzuro.friendSystem.utils.FriendListUtils;
 import me.yinzuro.friendSystem.utils.FriendNameGroups;
@@ -21,10 +22,10 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.*;
 
 public class FriendListClickListener implements Listener {
 
@@ -208,8 +209,30 @@ public class FriendListClickListener implements Listener {
 
     private List<UUID> getOpenFriendRequests(Player player) {
         String query = """
-        SELECT * FROM open_friend_requests
+        SELECT from_player_uuid FROM open_friend_requests
         WHERE player_uuid = ?;
         """;
+
+        List<UUID> friendUUIDs = new ArrayList<>();
+
+        try (Connection connection = FriendSystem.getDatabase().getConnection();
+             PreparedStatement ps = connection.prepareStatement(query)) {
+
+            ps.setString(1, player.getUniqueId().toString());
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    String uuidStr = rs.getString("from_player_uuid");
+                    if (uuidStr != null) {
+                        friendUUIDs.add(UUID.fromString(uuidStr));
+                    }
+                }
+            }
+        } catch (Exception e) {
+            player.sendMessage(PREFIX + "§cThere was an error while getting your open requests.");
+            plugin.getLogger().severe("MySQL-ERROR while reading from open_friend_requests.");
+        }
+
+        return friendUUIDs;
     }
 }
