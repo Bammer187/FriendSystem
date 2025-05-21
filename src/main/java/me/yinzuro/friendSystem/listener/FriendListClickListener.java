@@ -135,9 +135,7 @@ public class FriendListClickListener implements Listener {
                     FriendInventoryUtils.runLater(() -> openRemoveInventory(player, name));
                 }
             }
-            case LIME_DYE -> {
-
-            }
+            case LIME_DYE -> FriendInventoryUtils.handleCommandItem(player, event.getInventory(), "friend accept");
             case RED_DYE -> {
 
             }
