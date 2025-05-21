@@ -330,6 +330,12 @@ public class FriendListClickListener implements Listener {
         friendHead.setItemMeta(friendHeadMeta);
         removeInventory.setItem(22, friendHead);
 
+        ItemStack remove = new ItemStack(Material.RED_DYE);
+        ItemMeta removeMeta = remove.getItemMeta();
+        removeMeta.displayName(Component.text("§4Remove friend"));
+        remove.setItemMeta(removeMeta);
+        removeInventory.setItem(31, remove);
+
         ItemStack backToFriendList = new ItemStack(Material.BARRIER);
         ItemMeta backToFriendListMeta = backToFriendList.getItemMeta();
         backToFriendListMeta.displayName(Component.text("§cBack"));
