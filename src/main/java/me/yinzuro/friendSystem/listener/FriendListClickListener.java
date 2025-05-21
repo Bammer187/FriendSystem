@@ -111,7 +111,8 @@ public class FriendListClickListener implements Listener {
 
         switch (clicked.getType()) {
             case CHEST -> {
-
+                player.closeInventory();
+                FriendInventoryUtils.runLater(() -> openFriendRequestsInventory(player, 1));
             }
             case BARRIER -> {
 

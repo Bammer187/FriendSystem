@@ -11,7 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class FriendInventoryUtils {
 
-    private final JavaPlugin plugin = FriendSystem.getInstance();
+    private static final JavaPlugin plugin = FriendSystem.getInstance();
 
     public static final Component FRIEND_LIST = Component.text("§bYour friends");
     public static final Component FRIEND_REQUESTS = Component.text("§bYour friend requests");
@@ -23,7 +23,7 @@ public final class FriendInventoryUtils {
                 || title.equals(FriendInventoryUtils.ACCEPT_DENY) || title.equals(FriendInventoryUtils.REMOVE);
     }
 
-    private void runLater(Runnable task) {
+    public static void runLater(Runnable task) {
         Bukkit.getScheduler().runTaskLater(plugin, task, 2L);
     }
 
