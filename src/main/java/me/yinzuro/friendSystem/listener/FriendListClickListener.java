@@ -1,6 +1,7 @@
 package me.yinzuro.friendSystem.listener;
 
 import static me.yinzuro.friendSystem.utils.ChatPrefix.PREFIX;
+import static me.yinzuro.friendSystem.utils.FriendInventoryUtils.FRIEND_LIST;
 import me.yinzuro.friendSystem.FriendSystem;
 import me.yinzuro.friendSystem.utils.FriendInventoryUtils;
 import me.yinzuro.friendSystem.utils.FriendListUtils;
@@ -87,48 +88,23 @@ public class FriendListClickListener implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        Component titleFriendList = Component.text("§bYour friends");
-        Component titleFriendRequests = Component.text("§bYour friend requests");
-        Component titleAcceptDeny = Component.text("§bFriend request");
-        Component titleRemove = Component.text("§bRemove friend");
-
         if (!FriendInventoryUtils.isHandledTitle(event.getView().title())) return;
 
         event.setCancelled(true);
 
         Player player = (Player) event.getWhoClicked();
+        Component title = event.getView().title();
         int slot = event.getRawSlot();
+        ItemStack clicked = event.getCurrentItem();
 
-        if (slot == 45 && event.getView().title().equals(titleFriendList)) {
-            int newPage = Math.max(1, playerPages.get(player.getUniqueId()) - 1);
-            playerPages.put(player.getUniqueId(), newPage);
-            openFriendInventory(player, newPage);
-        }
-        else if (slot == 53 && event.getView().title().equals(titleFriendList)) {
-            double MAX_PLAYERS_PER_PAGE = 36.0;
-            FriendNameGroups group = FriendListUtils.getFriendNameGroups(player);
-            List<String> allFriendNames = group.getAllFriends();
-
-            int maxPages = (int) Math.ceil((double) allFriendNames.size() / MAX_PLAYERS_PER_PAGE);
-            int newPage = Math.min(maxPages, playerPages.get(player.getUniqueId()) + 1);
-            playerPages.put(player.getUniqueId(), newPage);
-            openFriendInventory(player, newPage);
+        if (title.equals(FriendInventoryUtils.FRIEND_LIST)) {
+            handleFriendListNavigation(player, slot);
+            return;
         }
 
-        if (slot == 45 && event.getView().title().equals(titleFriendList)) {
-            int newPage = Math.max(1, playerRequestsPages.get(player.getUniqueId()) - 1);
-            playerRequestsPages.put(player.getUniqueId(), newPage);
-            openFriendInventory(player, newPage);
-        }
-        else if (slot == 53 && event.getView().title().equals(titleFriendList)) {
-            double MAX_PLAYERS_PER_PAGE = 36.0;
-
-            List<UUID> allFriendUUIDs = getOpenFriendRequests(player);
-
-            int maxPages = (int) Math.ceil((double) allFriendUUIDs.size() / MAX_PLAYERS_PER_PAGE);
-            int newPage = Math.min(maxPages, playerRequestsPages.get(player.getUniqueId()) + 1);
-            playerRequestsPages.put(player.getUniqueId(), newPage);
-            openFriendInventory(player, newPage);
+        if (title.equals(FriendInventoryUtils.FRIEND_REQUESTS)) {
+            handleFriendRequestsNavigation(player, slot);
+            return;
         }
 
         if (event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.CHEST) {
