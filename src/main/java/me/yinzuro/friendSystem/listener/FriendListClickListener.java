@@ -137,6 +137,14 @@ public class FriendListClickListener implements Listener {
                 player.closeInventory();
             }
         }
+        else if (event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.RED_DYE) {
+            ItemStack nameItem = event.getInventory().getItem(22);
+            if (nameItem != null && nameItem.hasItemMeta() && nameItem.getItemMeta().hasDisplayName()) {
+                String friendName = PlainTextComponentSerializer.plainText().serialize(nameItem.getItemMeta().displayName()).replace("§e", "");
+                player.performCommand("friend deny " + friendName);
+                player.closeInventory();
+            }
+        }
     }
 
     @EventHandler
