@@ -83,8 +83,9 @@ public class FriendListClickListener implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        Component title = Component.text("§bYour friends");
-        if (!event.getView().title().equals(title)) return;
+        Component titleFriendList = Component.text("§bYour friends");
+        Component titleFriendRequests = Component.text("§bYour friend requests");
+        if (!event.getView().title().equals(titleFriendList) && !event.getView().title().equals(titleFriendRequests)) return;
 
         event.setCancelled(true);
 
@@ -115,8 +116,9 @@ public class FriendListClickListener implements Listener {
 
     @EventHandler
     public void onInventoryDrag(InventoryDragEvent event) {
-        Component title = Component.text("§bYour friends");
-        if (event.getView().title().equals(title)) {
+        Component titleFriendList = Component.text("§bYour friends");
+        Component titleFriendRequests = Component.text("§bYour friend requests");
+        if (event.getView().title().equals(titleFriendList) || event.getView().title().equals(titleFriendRequests)) {
             event.setCancelled(true);
         }
     }
