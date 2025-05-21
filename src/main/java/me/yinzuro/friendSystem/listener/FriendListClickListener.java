@@ -137,7 +137,10 @@ public class FriendListClickListener implements Listener {
             }
             case LIME_DYE -> FriendInventoryUtils.handleCommandItem(player, event.getInventory(), "friend accept");
             case RED_DYE -> {
-
+                if (title.equals(FriendInventoryUtils.ACCEPT_DENY))
+                    FriendInventoryUtils.handleCommandItem(player, event.getInventory(), "friend deny");
+                else if (title.equals(FriendInventoryUtils.REMOVE))
+                    FriendInventoryUtils.handleCommandItem(player, event.getInventory(), "friend remove");
             }
         }
     }
@@ -364,12 +367,6 @@ public class FriendListClickListener implements Listener {
         }
 
         return friendUUIDs;
-    }
-
-    private String removeFirstAndLastChar(String str) {
-        str = str.substring(1, str.length() - 1);
-
-        return str;
     }
 
     private void handleFriendListNavigation(Player player, int slot) {
