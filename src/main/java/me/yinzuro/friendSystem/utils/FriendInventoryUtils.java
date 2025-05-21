@@ -27,7 +27,7 @@ public final class FriendInventoryUtils {
         Bukkit.getScheduler().runTaskLater(plugin, task, 2L);
     }
 
-    private static String extractName(Component displayName) {
+    public static String extractName(Component displayName) {
         return PlainTextComponentSerializer.plainText().serialize(displayName).replace("§e", "").strip();
     }
 

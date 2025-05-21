@@ -122,7 +122,11 @@ public class FriendListClickListener implements Listener {
                     FriendInventoryUtils.runLater(() -> openFriendRequestsInventory(player, 1));
             }
             case FILLED_MAP -> {
-
+                if (title.equals(FriendInventoryUtils.FRIEND_REQUESTS)) {
+                    String name = FriendInventoryUtils.extractName(clicked.displayName());
+                    player.closeInventory();
+                    FriendInventoryUtils.runLater(() -> openAcceptDenyInventory(player, name));
+                }
             }
             case PLAYER_HEAD, SKELETON_SKULL -> {
 
