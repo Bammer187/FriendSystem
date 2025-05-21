@@ -9,7 +9,6 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -32,6 +31,7 @@ import java.util.*;
 public class FriendListClickListener implements Listener {
 
     private final Map<UUID, Integer> playerPages = new HashMap<>();
+    private final Map<UUID, Integer> playerRequestsPages = new HashMap<>();
     private final JavaPlugin plugin = FriendSystem.getInstance();
 
     @EventHandler
@@ -110,6 +110,22 @@ public class FriendListClickListener implements Listener {
             int maxPages = (int) Math.ceil((double) allFriendNames.size() / MAX_PLAYERS_PER_PAGE);
             int newPage = Math.min(maxPages, playerPages.get(player.getUniqueId()) + 1);
             playerPages.put(player.getUniqueId(), newPage);
+            openFriendInventory(player, newPage);
+        }
+
+        if (slot == 45 && event.getView().title().equals(titleFriendList)) {
+            int newPage = Math.max(1, playerRequestsPages.get(player.getUniqueId()) - 1);
+            playerRequestsPages.put(player.getUniqueId(), newPage);
+            openFriendInventory(player, newPage);
+        }
+        else if (slot == 53 && event.getView().title().equals(titleFriendList)) {
+            double MAX_PLAYERS_PER_PAGE = 36.0;
+
+            List<UUID> allFriendUUIDs = getOpenFriendRequests(player);
+
+            int maxPages = (int) Math.ceil((double) allFriendUUIDs.size() / MAX_PLAYERS_PER_PAGE);
+            int newPage = Math.min(maxPages, playerRequestsPages.get(player.getUniqueId()) + 1);
+            playerRequestsPages.put(player.getUniqueId(), newPage);
             openFriendInventory(player, newPage);
         }
 
