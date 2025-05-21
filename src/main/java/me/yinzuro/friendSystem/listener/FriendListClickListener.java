@@ -406,4 +406,8 @@ public class FriendListClickListener implements Listener {
 
         return str;
     }
+
+    private void handleFriendListNavigation(Player player, int slot) {
+
+    }
 }
