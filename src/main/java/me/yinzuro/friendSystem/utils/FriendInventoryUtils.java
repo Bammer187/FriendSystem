@@ -22,4 +22,8 @@ public final class FriendInventoryUtils {
     private void runLater(Runnable task) {
         Bukkit.getScheduler().runTaskLater(plugin, task, 2L);
     }
+
+    private String extractName(Component displayName) {
+
+    }
 }
