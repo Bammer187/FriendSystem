@@ -89,7 +89,8 @@ public class FriendListClickListener implements Listener {
         Component titleFriendList = Component.text("§bYour friends");
         Component titleFriendRequests = Component.text("§bYour friend requests");
         Component titleAcceptDeny = Component.text("§bFriend request");
-        if (!event.getView().title().equals(titleFriendList) && !event.getView().title().equals(titleFriendRequests) && !event.getView().title().equals(titleAcceptDeny)) return;
+        Component titleRemove = Component.text("§bRemove friend");
+        if (!event.getView().title().equals(titleFriendList) && !event.getView().title().equals(titleFriendRequests) && !event.getView().title().equals(titleAcceptDeny) && !event.getView().title().equals(titleRemove)) return;
 
         event.setCancelled(true);
 
@@ -130,7 +131,12 @@ public class FriendListClickListener implements Listener {
             String plainName = removeFirstAndLastChar(PlainTextComponentSerializer.plainText().serialize(friendName));
             Bukkit.getScheduler().runTaskLater(plugin, () -> openAcceptDenyInventory(player, plainName), 2L);
         }
-        else if (event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.LIME_DYE) {
+        else if (event.getCurrentItem() != null && (event.getCurrentItem().getType() == Material.PLAYER_HEAD || event.getCurrentItem().getType() == Material.SKELETON_SKULL) && event.getView().title().equals(titleFriendList)) {
+            player.closeInventory();
+            Component friendName = event.getCurrentItem().displayName();
+            String plainName = removeFirstAndLastChar(PlainTextComponentSerializer.plainText().serialize(friendName));
+            Bukkit.getScheduler().runTaskLater(plugin, () -> openRemoveInventory(player, plainName), 2L);
+        } else if (event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.LIME_DYE) {
             ItemStack nameItem = event.getInventory().getItem(22);
             if (nameItem != null && nameItem.hasItemMeta() && nameItem.getItemMeta().hasDisplayName()) {
                 String friendName = PlainTextComponentSerializer.plainText().serialize(nameItem.getItemMeta().displayName()).replace("§e", "");
@@ -309,7 +315,7 @@ public class FriendListClickListener implements Listener {
     }
 
     public void openRemoveInventory(Player player, String friendName) {
-        Component title = Component.text("§b" + friendName);
+        Component title = Component.text("§bRemove friend");
         Inventory removeInventory = Bukkit.createInventory(null, 54, title);
 
         for (int i=0; i<9; i++) {
