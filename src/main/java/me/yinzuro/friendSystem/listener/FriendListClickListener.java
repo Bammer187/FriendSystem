@@ -2,6 +2,7 @@ package me.yinzuro.friendSystem.listener;
 
 import static me.yinzuro.friendSystem.utils.ChatPrefix.PREFIX;
 import me.yinzuro.friendSystem.FriendSystem;
+import me.yinzuro.friendSystem.utils.FriendInventoryUtils;
 import me.yinzuro.friendSystem.utils.FriendListUtils;
 import me.yinzuro.friendSystem.utils.FriendNameGroups;
 import net.kyori.adventure.text.Component;
@@ -90,7 +91,8 @@ public class FriendListClickListener implements Listener {
         Component titleFriendRequests = Component.text("§bYour friend requests");
         Component titleAcceptDeny = Component.text("§bFriend request");
         Component titleRemove = Component.text("§bRemove friend");
-        if (!event.getView().title().equals(titleFriendList) && !event.getView().title().equals(titleFriendRequests) && !event.getView().title().equals(titleAcceptDeny) && !event.getView().title().equals(titleRemove)) return;
+
+        if (!FriendInventoryUtils.isHandledTitle(event.getView().title())) return;
 
         event.setCancelled(true);
 

@@ -9,6 +9,7 @@ public final class FriendInventoryUtils {
     static final Component REMOVE = Component.text("§bRemove friend");
 
     public static boolean isHandledTitle(Component title) {
-
+        return title.equals(FriendInventoryUtils.FRIEND_LIST) || title.equals(FriendInventoryUtils.FRIEND_REQUESTS)
+                || title.equals(FriendInventoryUtils.ACCEPT_DENY) || title.equals(FriendInventoryUtils.REMOVE);
     }
 }
