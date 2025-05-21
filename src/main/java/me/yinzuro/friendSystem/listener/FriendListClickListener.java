@@ -238,6 +238,10 @@ public class FriendListClickListener implements Listener {
         player.openInventory(friendRequestsInventory);
     }
 
+    public void openAcceptDenyInventory(Player player) {
+
+    }
+
     private List<UUID> getOpenFriendRequests(Player player) {
         String query = """
         SELECT from_player_uuid FROM open_friend_requests
