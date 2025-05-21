@@ -308,7 +308,20 @@ public class FriendListClickListener implements Listener {
     }
 
     public void openRemoveInventory(Player player, String friendName) {
+        Component title = Component.text("§b" + friendName);
+        Inventory removeInventory = Bukkit.createInventory(null, 54, title);
 
+        for (int i=0; i<9; i++) {
+            ItemStack glassPane = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
+            removeInventory.setItem(i, glassPane);
+        }
+
+        for (int i=45; i<54; i++) {
+            ItemStack glassPane = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
+            removeInventory.setItem(i, glassPane);
+        }
+
+        player.openInventory(removeInventory);
     }
 
     private List<UUID> getOpenFriendRequests(Player player) {
