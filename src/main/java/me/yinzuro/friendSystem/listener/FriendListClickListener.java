@@ -1,6 +1,6 @@
 package me.yinzuro.friendSystem.listener;
 
-import static  me.yinzuro.friendSystem.utils.ChatPrefix.PREFIX;
+import static me.yinzuro.friendSystem.utils.ChatPrefix.PREFIX;
 import me.yinzuro.friendSystem.FriendSystem;
 import me.yinzuro.friendSystem.utils.FriendListUtils;
 import me.yinzuro.friendSystem.utils.FriendNameGroups;
@@ -128,6 +128,14 @@ public class FriendListClickListener implements Listener {
             Component friendName = event.getCurrentItem().displayName();
             String plainName = removeFirstAndLastChar(PlainTextComponentSerializer.plainText().serialize(friendName));
             Bukkit.getScheduler().runTaskLater(plugin, () -> openAcceptDenyInventory(player, plainName), 2L);
+        }
+        else if (event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.LIME_DYE) {
+            ItemStack nameItem = event.getInventory().getItem(22);
+            if (nameItem != null && nameItem.hasItemMeta() && nameItem.getItemMeta().hasDisplayName()) {
+                String friendName = PlainTextComponentSerializer.plainText().serialize(nameItem.getItemMeta().displayName()).replace("§e", "");
+                player.performCommand("friend accept " + friendName);
+                player.closeInventory();
+            }
         }
     }
 
