@@ -1,14 +1,12 @@
 package me.yinzuro.friendSystem.listener;
 
 import static me.yinzuro.friendSystem.utils.ChatPrefix.PREFIX;
-import static me.yinzuro.friendSystem.utils.FriendInventoryUtils.FRIEND_LIST;
 import me.yinzuro.friendSystem.FriendSystem;
 import me.yinzuro.friendSystem.utils.FriendInventoryUtils;
 import me.yinzuro.friendSystem.utils.FriendListUtils;
 import me.yinzuro.friendSystem.utils.FriendNameGroups;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -97,16 +95,6 @@ public class FriendListClickListener implements Listener {
         int slot = event.getRawSlot();
         ItemStack clicked = event.getCurrentItem();
 
-        if (title.equals(FriendInventoryUtils.FRIEND_LIST)) {
-            handleFriendListNavigation(player, slot);
-            return;
-        }
-
-        if (title.equals(FriendInventoryUtils.FRIEND_REQUESTS)) {
-            handleFriendRequestsNavigation(player, slot);
-            return;
-        }
-
         if (clicked == null || clicked.getType() == Material.AIR) return;
 
         switch (clicked.getType()) {
@@ -141,6 +129,12 @@ public class FriendListClickListener implements Listener {
                     FriendInventoryUtils.handleCommandItem(player, event.getInventory(), "friend deny");
                 else if (title.equals(FriendInventoryUtils.REMOVE))
                     FriendInventoryUtils.handleCommandItem(player, event.getInventory(), "friend remove");
+            }
+            case ARROW -> {
+                if (title.equals(FriendInventoryUtils.FRIEND_LIST))
+                    handleFriendListNavigation(player, slot);
+                else if (title.equals(FriendInventoryUtils.FRIEND_REQUESTS))
+                    handleFriendRequestsNavigation(player, slot);
             }
         }
     }
