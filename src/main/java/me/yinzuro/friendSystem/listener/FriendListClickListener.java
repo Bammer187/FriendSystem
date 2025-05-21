@@ -408,6 +408,18 @@ public class FriendListClickListener implements Listener {
     }
 
     private void handleFriendListNavigation(Player player, int slot) {
-
+        UUID uuid = player.getUniqueId();
+        if (slot == 45) {
+            int page = Math.max(1, playerPages.get(uuid) - 1);
+            playerPages.put(uuid, page);
+            openFriendInventory(player, page);
+        } else if (slot == 53) {
+            double MAX_PLAYER_PER_PAGE = 36.0;
+            List<String> allNames = FriendListUtils.getFriendNameGroups(player).getAllFriends();
+            int maxPages = (int) Math.ceil(allNames.size() / MAX_PLAYER_PER_PAGE);
+            int page = Math.min(maxPages, playerPages.get(uuid) + 1);
+            playerPages.put(uuid, page);
+            openFriendInventory(player, page);
+        }
     }
 }
