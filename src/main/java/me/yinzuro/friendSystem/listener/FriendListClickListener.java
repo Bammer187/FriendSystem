@@ -108,6 +108,27 @@ public class FriendListClickListener implements Listener {
         }
 
         if (clicked == null || clicked.getType() == Material.AIR) return;
+
+        switch (clicked.getType()) {
+            case CHEST -> {
+
+            }
+            case BARRIER -> {
+
+            }
+            case FILLED_MAP -> {
+
+            }
+            case PLAYER_HEAD, SKELETON_SKULL -> {
+
+            }
+            case LIME_DYE -> {
+
+            }
+            case RED_DYE -> {
+
+            }
+        }
     }
 
     @EventHandler
