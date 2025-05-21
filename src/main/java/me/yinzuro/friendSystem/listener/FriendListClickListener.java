@@ -6,6 +6,7 @@ import me.yinzuro.friendSystem.utils.FriendListUtils;
 import me.yinzuro.friendSystem.utils.FriendNameGroups;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -124,7 +125,9 @@ public class FriendListClickListener implements Listener {
         }
         else if (event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.FILLED_MAP && event.getView().title().equals(titleFriendRequests)) {
             player.closeInventory();
-            Bukkit.getScheduler().runTaskLater(plugin, () -> openAcceptDenyInventory(player, "test"), 2L);
+            Component friendName = event.getCurrentItem().displayName();
+            String plainName = removeFirstAndLastChar(PlainTextComponentSerializer.plainText().serialize(friendName));
+            Bukkit.getScheduler().runTaskLater(plugin, () -> openAcceptDenyInventory(player, plainName), 2L);
         }
     }
 
@@ -263,7 +266,7 @@ public class FriendListClickListener implements Listener {
 
         ItemStack friendNamePaper = new ItemStack(Material.FILLED_MAP);
         ItemMeta friendNameMeta = friendNamePaper.getItemMeta();
-        friendNameMeta.displayName(Component.text("§e" + friendName));
+        friendNameMeta.displayName(Component.text(friendName));
         friendNamePaper.setItemMeta(friendNameMeta);
         acceptDenyInventory.setItem(22, friendNamePaper);
 
@@ -315,5 +318,11 @@ public class FriendListClickListener implements Listener {
         }
 
         return friendUUIDs;
+    }
+
+    private String removeFirstAndLastChar(String str) {
+        str = str.substring(1, str.length() - 1);
+
+        return str;
     }
 }
