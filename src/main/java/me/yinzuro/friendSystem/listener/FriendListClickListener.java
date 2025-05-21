@@ -158,6 +158,12 @@ public class FriendListClickListener implements Listener {
         nextPage.setItemMeta(nextMeta);
         friendsInventory.setItem(53, nextPage);
 
+        ItemStack friendRequets = new ItemStack(Material.CHEST);
+        ItemMeta friendRequestsMeta = friendRequets.getItemMeta();
+        friendRequestsMeta.displayName(Component.text("§eFriend requests"));
+        friendRequets.setItemMeta(friendRequestsMeta);
+        friendsInventory.setItem(49, friendRequets);
+
         player.openInventory(friendsInventory);
     }
 }

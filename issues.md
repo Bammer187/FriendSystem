@@ -20,3 +20,5 @@
 18. (X) ISSUE-018: Class to separate online offline Players
 19. (X) ISSUE-019: aliases and descriptions for commands
 20. (X) ISSUE-020: Update text sent to the player
+21. () ISSUE-021: new inventory in friend list GUI for friend request
+22. () ISSUE-022: remove friends from friend list GUI
