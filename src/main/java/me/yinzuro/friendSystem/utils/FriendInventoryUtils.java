@@ -4,6 +4,8 @@ import me.yinzuro.friendSystem.FriendSystem;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class FriendInventoryUtils {
@@ -26,5 +28,9 @@ public final class FriendInventoryUtils {
 
     private String extractName(Component displayName) {
         return PlainTextComponentSerializer.plainText().serialize(displayName).replace("§e", "").strip();
+    }
+
+    public static void handleCommandItem(Player player, Inventory inv, String baseCommand) {
+
     }
 }
