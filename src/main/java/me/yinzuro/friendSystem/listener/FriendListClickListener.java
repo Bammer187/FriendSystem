@@ -321,6 +321,12 @@ public class FriendListClickListener implements Listener {
             removeInventory.setItem(i, glassPane);
         }
 
+        ItemStack backToFriendList = new ItemStack(Material.BARRIER);
+        ItemMeta backToFriendListMeta = backToFriendList.getItemMeta();
+        backToFriendListMeta.displayName(Component.text("§cBack"));
+        backToFriendList.setItemMeta(backToFriendListMeta);
+        removeInventory.setItem(49, backToFriendList);
+
         player.openInventory(removeInventory);
     }
 
