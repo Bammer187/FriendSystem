@@ -205,4 +205,8 @@ public class FriendListClickListener implements Listener {
 
         player.openInventory(friendRequestsInventory);
     }
+
+    private void getOpenFriendRequests(Player player) {
+
+    }
 }
