@@ -1,5 +1,6 @@
 package me.yinzuro.friendSystem.commands;
 
+import static me.yinzuro.friendSystem.utils.ChatPrefix.PREFIX;
 import me.yinzuro.friendSystem.FriendSystem;
 import me.yinzuro.friendSystem.utils.MessageUtils;
 import org.bukkit.Bukkit;
@@ -22,28 +23,28 @@ public class MessageCommandExecutor implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String @NotNull [] strings) {
         if (!(commandSender instanceof Player player)) {
-            commandSender.sendMessage("§cYou aren't a player.");
+            commandSender.sendMessage(PREFIX + "§cYou aren't a player.");
             return true;
         }
 
         if (strings.length != 2) {
-            player.sendMessage("§cUsage: /message <Player> <message>");
+            player.sendMessage(PREFIX + "Usage: /message <Player> <message>");
             return true;
         }
 
         Player friend = Bukkit.getPlayerExact(strings[0]);
         if (friend == null) {
-            player.sendMessage("§cCouldn't find a player with the given name.");
+            player.sendMessage(PREFIX + "Couldn't find a player with the given name.");
             return true;
         } else if (friend == player) {
-            player.sendMessage("§cYou can't message yourself.");
+            player.sendMessage(PREFIX + "You can't message yourself.");
             return true;
         }
 
         try {
                 MessageUtils.sendPrivateMessage(player, friend, strings[1]);
         } catch (SQLException e) {
-            player.sendMessage("§cThere was an error while trying to send the message");
+            player.sendMessage(PREFIX + "§cThere was an error while trying to send the message");
             plugin.getLogger().severe("MySQL-ERROR while reading from friends: " + e.getMessage());
         }
 
